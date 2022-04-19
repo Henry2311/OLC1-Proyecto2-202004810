@@ -1,0 +1,6 @@
+int prueba = 2;
+int prueba2 = 3;
+
+int pruebaT = (prueba>prueba2)?58:10;
+
+print(pruebaT);
