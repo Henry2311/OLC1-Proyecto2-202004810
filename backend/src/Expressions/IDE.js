@@ -46,7 +46,8 @@ var IDE = /** @class */ (function (_super) {
                 return { value: value, type: type_1.Type.CHAR };
             }
             else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
-                if (env.getValue(this.id) == "true")
+                console.log("VALOR EN VARIABLE" + env.getValue(this.id));
+                if (env.getValue(this.id) == "true" || env.getValue(this.id))
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
@@ -59,9 +60,10 @@ var IDE = /** @class */ (function (_super) {
             var exp2 = (_b = this.expression2) === null || _b === void 0 ? void 0 : _b.run(env);
             if (exp1 != null && exp2 == null) {
                 if (exp1.type == type_1.Type.INT) {
-                    var tmp = env.getValue(this.id);
-                    var value = tmp[exp1.value].value;
-                    console.log("VALOR DEL VECTOR: " + Number(value));
+                    var tmp = Array.from(env.getValue(this.id));
+                    console.log("VECTOR: " + tmp);
+                    var value = tmp[exp1.value];
+                    console.log("VALOR DEL VECTOR: " + value);
                     if (env.getType(this.id) == type_1.Type.INT) {
                         return { value: Number(value), type: type_1.Type.INT };
                     }
@@ -73,11 +75,11 @@ var IDE = /** @class */ (function (_super) {
                         return { value: value, type: type_1.Type.STRING };
                     }
                     else if (env.getType(this.id) == type_1.Type.CHAR) {
-                        value = value.replaceAll("\"", "");
+                        value = value.replaceAll("\'", "");
                         return { value: value, type: type_1.Type.CHAR };
                     }
                     else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
-                        if (env.getValue(this.id) == "true")
+                        if (env.getValue(this.id) == "true" || env.getValue(this.id))
                             return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                         else
                             return { value: Boolean(false), type: type_1.Type.BOOLEAN };
@@ -91,9 +93,10 @@ var IDE = /** @class */ (function (_super) {
             }
             else if (exp1 != null && exp2 != null) {
                 if (exp1.type == type_1.Type.INT && exp2.type == type_1.Type.INT) {
-                    var tmp = env.getValue(this.id);
-                    var value = tmp[exp1.value][exp2.value].value;
-                    console.log("VALOR DEL VECTOR: " + Number(value));
+                    var tmp = Array.from(env.getValue(this.id));
+                    console.log("Matriz: " + tmp);
+                    var value = tmp[exp1.value][exp2.value];
+                    console.log("VALOR DEL MATRIZ: " + value);
                     if (env.getType(this.id) == type_1.Type.INT) {
                         return { value: Number(value), type: type_1.Type.INT };
                     }
@@ -105,11 +108,11 @@ var IDE = /** @class */ (function (_super) {
                         return { value: value, type: type_1.Type.STRING };
                     }
                     else if (env.getType(this.id) == type_1.Type.CHAR) {
-                        value = value.replaceAll("\"", "");
+                        value = value.replaceAll("\'", "");
                         return { value: value, type: type_1.Type.CHAR };
                     }
                     else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
-                        if (env.getValue(this.id) == "true")
+                        if (env.getValue(this.id) == "true" || env.getValue(this.id))
                             return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                         else
                             return { value: Boolean(false), type: type_1.Type.BOOLEAN };

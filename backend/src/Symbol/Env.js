@@ -20,36 +20,55 @@ var ENV = /** @class */ (function () {
         return false;
     };
     ENV.prototype.search = function (nombre) {
-        for (var _i = 0, _a = Array.from(this.tablaSimbolos.entries()); _i < _a.length; _i++) {
-            var entry = _a[_i];
-            if (entry[0] == nombre)
-                return true;
+        var env = this;
+        while (env != null) {
+            for (var _i = 0, _a = Array.from(env.tablaSimbolos.entries()); _i < _a.length; _i++) {
+                var entry = _a[_i];
+                if (entry[0] == nombre) {
+                    return true;
+                }
+            }
+            env = env.anterior;
         }
         return false;
     };
     ENV.prototype.getType = function (nombre) {
-        for (var _i = 0, _a = Array.from(this.tablaSimbolos.entries()); _i < _a.length; _i++) {
-            var entry = _a[_i];
-            if (entry[0] == nombre)
-                return entry[1].type;
+        var env = this;
+        while (env != null) {
+            for (var _i = 0, _a = Array.from(env.tablaSimbolos.entries()); _i < _a.length; _i++) {
+                var entry = _a[_i];
+                if (entry[0] == nombre) {
+                    return entry[1].type;
+                }
+            }
+            env = env.anterior;
         }
         return type_1.Type.error;
     };
     ENV.prototype.setVar = function (nombre, valor) {
-        for (var _i = 0, _a = Array.from(this.tablaSimbolos.entries()); _i < _a.length; _i++) {
-            var entry = _a[_i];
-            if (entry[0] == nombre) {
-                entry[1].value = valor;
+        var env = this;
+        while (env != null) {
+            for (var _i = 0, _a = Array.from(env.tablaSimbolos.entries()); _i < _a.length; _i++) {
+                var entry = _a[_i];
+                if (entry[0] == nombre) {
+                    entry[1].value = valor;
+                }
             }
+            env = env.anterior;
         }
     };
     ENV.prototype.getValue = function (nombre) {
-        for (var _i = 0, _a = Array.from(this.tablaSimbolos.entries()); _i < _a.length; _i++) {
-            var entry = _a[_i];
-            if (entry[0] == nombre) {
-                return entry[1].value;
+        var env = this;
+        while (env != null) {
+            for (var _i = 0, _a = Array.from(env.tablaSimbolos.entries()); _i < _a.length; _i++) {
+                var entry = _a[_i];
+                if (entry[0] == nombre) {
+                    return entry[1].value;
+                }
             }
+            env = env.anterior;
         }
+        return null;
     };
     return ENV;
 }());

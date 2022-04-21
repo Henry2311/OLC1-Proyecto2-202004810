@@ -37,8 +37,30 @@ var DeclaracionV = /** @class */ (function (_super) {
         if (exp1 != null && exp2 == null && this.list == null) {
             if (exp1.type == type_1.Type.INT) {
                 var valueA = [];
-                for (var i = 0; i < exp1.value; i++) {
-                    valueA.push('*');
+                if (this.type == type_1.Type.INT) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        valueA.push(0);
+                    }
+                }
+                else if (this.type == type_1.Type.DOUBLE) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        valueA.push(0.0);
+                    }
+                }
+                else if (this.type == type_1.Type.BOOLEAN) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        valueA.push(true);
+                    }
+                }
+                else if (this.type == type_1.Type.CHAR) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        valueA.push('0');
+                    }
+                }
+                else if (this.type == type_1.Type.STRING) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        valueA.push("");
+                    }
                 }
                 console.log(valueA);
                 var aux = env.saveVar(this.id, valueA, this.type);
@@ -57,12 +79,50 @@ var DeclaracionV = /** @class */ (function (_super) {
             if (exp1.type == type_1.Type.INT && exp2.type == type_1.Type.INT) {
                 var valueA = [];
                 var valueB = [];
-                for (var i = 0; i < exp1.value; i++) {
-                    for (var j = 0; j < exp2.value; j++) {
-                        valueB.push('*');
+                if (this.type == type_1.Type.INT) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        for (var j = 0; j < exp2.value + 1; j++) {
+                            valueB.push(0);
+                        }
+                        valueA.push(valueB);
+                        valueB = [];
                     }
-                    valueA.push(valueB);
-                    valueB = [];
+                }
+                else if (this.type == type_1.Type.DOUBLE) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        for (var j = 0; j < exp2.value + 1; j++) {
+                            valueB.push(0.0);
+                        }
+                        valueA.push(valueB);
+                        valueB = [];
+                    }
+                }
+                else if (this.type == type_1.Type.BOOLEAN) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        for (var j = 0; j < exp2.value + 1; j++) {
+                            valueB.push(true);
+                        }
+                        valueA.push(valueB);
+                        valueB = [];
+                    }
+                }
+                else if (this.type == type_1.Type.CHAR) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        for (var j = 0; j < exp2.value + 1; j++) {
+                            valueB.push('0');
+                        }
+                        valueA.push(valueB);
+                        valueB = [];
+                    }
+                }
+                else if (this.type == type_1.Type.STRING) {
+                    for (var i = 0; i < exp1.value + 1; i++) {
+                        for (var j = 0; j < exp2.value + 1; j++) {
+                            valueB.push("");
+                        }
+                        valueA.push(valueB);
+                        valueB = [];
+                    }
                 }
                 console.log(valueA);
                 var aux = env.saveVar(this.id, valueA, this.type);

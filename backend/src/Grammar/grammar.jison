@@ -2,14 +2,27 @@
     const {Declaracion} = require('../Instructions/Declaracion');
     const {DeclaracionV} = require('../Instructions/DeclaracionV');
     const {Asignacion} = require('../Instructions/Asignacion');
+    const {AsignacionV} = require('../Instructions/AsignacionV');
     const {Print} = require('../Instructions/Print');
     const {Println} = require('../Instructions/Printl');
     const {Increment} = require('../Instructions/Increment');
     const {Ternary} = require('../Instructions/Ternary');
+    const {Ifsentencia} = require('../Instructions/If');
+    const {Switch} = require('../Instructions/Switch');
+    const {SwitchCase} = require('../Instructions/SwitchCase');
+
+    const {cicloWhile} = require('../Instructions/cicloWhile');
+    const {cicloDo} = require('../Instructions/cicloDo');
+    const {cicloFor} = require('../Instructions/cicloFor');
+
     const {Arithmetic} = require('../Expressions/Arithmetic');
     const {ArithmeticOption} = require('../Expressions/Arithmetic');
     const {Rational} = require('../Expressions/Rational');
     const {RationalOption} = require('../Expressions/Rational');
+    const {Logic} = require('../Expressions/Logic');
+    const {LogicOption} = require('../Expressions/Logic');
+    const {Casteo} = require('../Expressions/Casteo');
+
     const {Type} = require('../Symbol/type');
     const {Value} = require('../Expressions/Value')
     const {IDE} = require('../Expressions/IDE')
@@ -94,7 +107,14 @@ boleano  "true"|"false"
                     console.log("reconoci token <boolean> con lexema: "+yytext)
                     return "boolean"
                 }
-
+"++"             {
+                    console.log("reconoci token <plus> con lexema: "+yytext)
+                    return "plus"
+                }
+"--"             {
+                    console.log("reconoci token <minus> con lexema: "+yytext)
+                    return "minus"
+                }
 "+"             {
                     console.log("reconoci token <mas> con lexema: "+yytext)
                     return "mas"
@@ -339,13 +359,13 @@ INSTRUCCIONES
 INSTRUCCION
     : DECLARACION "puntocoma"   {$$ = $1}
     | ASIGNACION "puntocoma"    {$$ = $1}
-    | INDECRE "puntocoma"       
-    | MODIFICACIONV "puntocoma"
-    | IFSENTENCIA
-    | SWITCHSENTENCIA 
-    | CICLOWHILE
-    | CICLOFOR
-    | CICLODOWHILE
+    | INDECRE "puntocoma"       {$$ = $1}     
+    | MODIFICACIONV "puntocoma" {$$ = $1}
+    | IFSENTENCIA               {$$ = $1}
+    | SWITCHSENTENCIA           {$$ = $1}
+    | CICLOWHILE                {$$ = $1}
+    | CICLOFOR      
+    | CICLODOWHILE              {$$ = $1}
     | FUNCTION
     | METODO
     | LLAMADA "puntocoma"
@@ -438,40 +458,40 @@ LLAMADAP
 ;
 
 CICLODOWHILE
-    : "do" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" "while" "parena" EXPRESION "parenc"
+    : "do" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" "while" "parena" EXPRESION "parenc"    {$$ = new cicloDo($8,$3,@1.first_line, @1.first_column)}
 ;
 
 CICLOFOR
-    : "for" "parena" INICIOFOR "puntocoma" EXPRESION "puntocoma" ACTUALIZACION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"
+    : "for" "parena" INICIOFOR "puntocoma" EXPRESION "puntocoma" ACTUALIZACION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"   {$$ = new cicloFor($3,$5,$7,$10,@1.first_line, @1.first_column)}
 ;
 
 ACTUALIZACION
-    : INDECRE
-    | ASIGNACION
+    : INDECRE           {$$ = $1}
+    | ASIGNACION        {$$ = S1}
 ;
 
 INICIOFOR
-    : DECLARACION
-    | ASIGNACION
+    : DECLARACION       {$$ = $1}
+    | ASIGNACION        {$$ = $1}
 ;
 
 CICLOWHILE
-    : "while" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"
+    : "while" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"     {$$ = new cicloWhile($3,$6,@1.first_line, @1.first_column)}
 ;
 
 SWITCHSENTENCIA
-    : "switch" "parena" EXPRESION "parenc" "llavea" LISTACASES CASEDEF "llavec"
+    : "switch" "parena" EXPRESION "parenc" "llavea" LISTACASES CASEDEF "llavec" {$$=new Switch($3,$6,$7 ,@1.first_line, @1.first_column)}
 ;
 
 LISTACASES
-    : "case" EXPRESION "dospunto" INSTRUCCIONES "break" "puntocoma" LISTACASES
-    | "case" EXPRESION "dospunto" INSTRUCCIONES "break" "puntocoma"
-    | "case" EXPRESION "dospunto" INSTRUCCIONES LISTACASES
-    | "case" EXPRESION "dospunto" INSTRUCCIONES
+    : LISTACASES "case" EXPRESION "dospunto" INSTRUCCIONES "break" "puntocoma"  {$1.push(new SwitchCase($3,$5,1,@1.first_line, @1.first_column)); $$=$1;}
+    | "case" EXPRESION "dospunto" INSTRUCCIONES "break" "puntocoma"             {$$=[new SwitchCase($2,$4,1,@1.first_line, @1.first_column)]}
+    | LISTACASES "case" EXPRESION "dospunto" INSTRUCCIONES                      {$1.push(new SwitchCase($3,$5,0,@1.first_line, @1.first_column)); $$=$1;}
+    | "case" EXPRESION "dospunto" INSTRUCCIONES                                 {$$=[new SwitchCase($2,$4,0,@1.first_line, @1.first_column)]} 
 ;
 
 CASEDEF
-    : "default" "dospunto" INSTRUCCIONES "break" "puntocoma"
+    : "default" "dospunto" INSTRUCCIONES "break" "puntocoma"        {$$ = $3}
 ;
 
 TRANSFERENCIA
@@ -483,14 +503,18 @@ TRANSFERENCIA
 ;
 
 IFSENTENCIA
-    : "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"
-    | "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"
-    | "else" "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" 
+    : "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"                       {$$ = new Ifsentencia($3,$6,null,@1.first_line, @1.first_column)}   
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" ELSESENTENCIA         {$$ = new Ifsentencia($3,$6,$9,@1.first_line, @1.first_column)}
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" else IFSENTENCIA      {$$ = new Ifsentencia($3,$6,$10,@1.first_line, @1.first_column)}
+;
+
+ELSESENTENCIA
+    : "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"  {$$ = new Ifsentencia(null,$3,null,@1.first_line, @1.first_column)}
 ;
 
 MODIFICACIONV
-    : "identificador" "corchetea" EXPRESION "corchetec" "igual" EXPRESION
-    | "identificador" "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec" "igual" EXPRESION
+    : "identificador" "corchetea" EXPRESION "corchetec" "igual" EXPRESION                                   {$$ = new AsignacionV($1,$3,null,$6,@1.first_line, @1.first_column)}
+    | "identificador" "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec" "igual" EXPRESION {$$ = new AsignacionV($1,$3,$6,$9,@1.first_line, @1.first_column)}
 ;
 
 ACCESOV
@@ -509,12 +533,12 @@ LISTAVALORESM
 ;
 
 INDECRE
-    : "identificador" "mas" "mas"          {$$ = new Increment($1,0,@1.first_line, @1.first_column)}        
-    | "identificador" "menos" "menos"      {$$ = new Increment($1,1,@1.first_line, @1.first_column)} 
+    : "identificador" "plus"            {$$ = new Increment($1,0,@1.first_line, @1.first_column)}        
+    | "identificador" "minus"           {$$ = new Increment($1,1,@1.first_line, @1.first_column)} 
 ;
 
 CASTEO
-    : "parena" TIPO "parenc" EXPRESION
+    : "parena" TIPO "parenc" EXPRESION  {$$ = new Casteo($2,$4,@1.first_line, @1.first_column)} 
 ;
 
 TERNARY
@@ -523,8 +547,6 @@ TERNARY
 
 ASIGNACION
     : "identificador" "igual" EXPRESION     {$$ = new Asignacion($1,$3,@1.first_line, @1.first_column)}
-    | "identificador" "igual" CASTEO
-    | "identificador" "igual" NATIVAS
 ;
 
 DECLARACION
@@ -558,8 +580,9 @@ EXPRESION
     |  EXPRESION "mayorigq" EXPRESION   {$$ = new Rational($1,$3,RationalOption.MAYORIGQ,@1.first_line, @1.first_column)}
     |  EXPRESION "menorigq" EXPRESION   {$$ = new Rational($1,$3,RationalOption.MENORIGQ,@1.first_line, @1.first_column)}
     |  EXPRESION "noigual" EXPRESION    {$$ = new Rational($1,$3,RationalOption.NOIGUAL,@1.first_line, @1.first_column)}
-    |  EXPRESION "and" EXPRESION
-    |  EXPRESION "or" EXPRESION
+    |  "negacion" EXPRESION             {$$ = new Logic(null,$2,LogicOption.NOT,@1.first_line, @1.first_column)}
+    |  EXPRESION "and" EXPRESION        {$$ = new Logic($1,$3,LogicOption.AND,@1.first_line, @1.first_column)}
+    |  EXPRESION "or" EXPRESION         {$$ = new Logic($1,$3,LogicOption.OR,@1.first_line, @1.first_column)}
     |  "parena" EXPRESION "parenc"      {$$ = $2}
     |  INDECRE                          {$$ = $1}
     |  ACCESOV                          {$$ = $1}

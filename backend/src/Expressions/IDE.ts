@@ -29,7 +29,8 @@ export class IDE extends Expression {
                 let value:string = env.getValue(this.id).replaceAll("\"","")
                 return { value: value, type: Type.CHAR }
             }else if (env.getType(this.id) == Type.BOOLEAN) {
-                if (env.getValue(this.id) == "true") return { value: Boolean(true), type: Type.BOOLEAN }
+                console.log("VALOR EN VARIABLE"+env.getValue(this.id))
+                if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: Boolean(true), type: Type.BOOLEAN }
                 else return { value: Boolean(false), type: Type.BOOLEAN }
             }
             else return { value: env.getValue(this.id), type: Type.error }
@@ -39,9 +40,10 @@ export class IDE extends Expression {
 
             if(exp1!=null && exp2==null){
                 if(exp1.type == Type.INT){
-                    let tmp = env.getValue(this.id)
-                    let value = tmp[exp1.value].value
-                    console.log("VALOR DEL VECTOR: "+Number(value))
+                    let tmp:any = Array.from(env.getValue(this.id))
+                    console.log("VECTOR: "+tmp)
+                    let value = tmp[exp1.value]
+                    console.log("VALOR DEL VECTOR: "+value)
                     if (env.getType(this.id) == Type.INT){
                         return { value: Number(value), type: Type.INT }
                     }else if(env.getType(this.id) == Type.DOUBLE){
@@ -50,10 +52,10 @@ export class IDE extends Expression {
                         value = value.replaceAll("\"","")
                         return { value: value, type: Type.STRING }
                     }else if(env.getType(this.id) == Type.CHAR){
-                        value = value.replaceAll("\"","")
+                        value = value.replaceAll("\'","")
                         return { value: value, type: Type.CHAR }
                     }else if (env.getType(this.id) == Type.BOOLEAN) {
-                        if (env.getValue(this.id) == "true") return { value: Boolean(true), type: Type.BOOLEAN }
+                        if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: Boolean(true), type: Type.BOOLEAN }
                         else return { value: Boolean(false), type: Type.BOOLEAN }
                     }
                     else return { value: env.getValue(this.id), type: Type.error }
@@ -63,9 +65,10 @@ export class IDE extends Expression {
                 }
             }else if(exp1!=null && exp2!=null){
                 if(exp1.type == Type.INT && exp2.type == Type.INT){
-                    let tmp = env.getValue(this.id)
-                    let value = tmp[exp1.value][exp2.value].value
-                    console.log("VALOR DEL VECTOR: "+Number(value))
+                    let tmp:any = Array.from(env.getValue(this.id))
+                    console.log("Matriz: "+tmp)
+                    let value = tmp[exp1.value][exp2.value]
+                    console.log("VALOR DEL MATRIZ: "+value)
                     if (env.getType(this.id) == Type.INT){
                         return { value: Number(value), type: Type.INT }
                     }else if(env.getType(this.id) == Type.DOUBLE){
@@ -74,10 +77,10 @@ export class IDE extends Expression {
                         value = value.replaceAll("\"","")
                         return { value: value, type: Type.STRING }
                     }else if(env.getType(this.id) == Type.CHAR){
-                        value = value.replaceAll("\"","")
+                        value = value.replaceAll("\'","")
                         return { value: value, type: Type.CHAR }
                     }else if (env.getType(this.id) == Type.BOOLEAN) {
-                        if (env.getValue(this.id) == "true") return { value: Boolean(true), type: Type.BOOLEAN }
+                        if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: Boolean(true), type: Type.BOOLEAN }
                         else return { value: Boolean(false), type: Type.BOOLEAN }
                     }
                     else return { value: env.getValue(this.id), type: Type.error }

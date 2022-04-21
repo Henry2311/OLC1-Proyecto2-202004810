@@ -1,6 +1,16 @@
-int prueba = 2;
-int prueba2 = 3;
+int x =50;
 
-int pruebaT = (prueba>prueba2)?58:10;
-
-print(pruebaT);
+switch(x){
+    case 18:
+        print("primer case");
+        break;
+    case 21:
+        print("correcto");
+        break;
+    case 15:
+        print("tercer case");
+        break;
+    default:
+        print("entre al default");
+        break;
+}

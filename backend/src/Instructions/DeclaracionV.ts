@@ -25,9 +25,28 @@ export class DeclaracionV extends Instruction {
         if(exp1 != null && exp2 == null && this.list == null){
             if(exp1.type == Type.INT){
                 let valueA: any[] = [];
-                for(let i=0;i<exp1.value;i++){
-                    valueA.push('*')
+                if(this.type == Type.INT){
+                    for(let i=0;i<exp1.value+1;i++){
+                        valueA.push(0)
+                    }
+                }else if(this.type == Type.DOUBLE){
+                    for(let i=0;i<exp1.value+1;i++){
+                        valueA.push(0.0)
+                    }
+                }else if(this.type == Type.BOOLEAN){
+                    for(let i=0;i<exp1.value+1;i++){
+                        valueA.push(true)
+                    }
+                }else if(this.type == Type.CHAR){
+                    for(let i=0;i<exp1.value+1;i++){
+                        valueA.push('0')
+                    }
+                }else if(this.type == Type.STRING){
+                    for(let i=0;i<exp1.value+1;i++){
+                        valueA.push("")
+                    }
                 }
+                
                 console.log(valueA)
                 const aux = env.saveVar(this.id,valueA,this.type)
                 if (aux){
@@ -42,13 +61,48 @@ export class DeclaracionV extends Instruction {
             if(exp1.type == Type.INT && exp2.type == Type.INT){
                 let valueA: any[] = [];
                 let valueB: any [] = [];
-                for(let i=0;i<exp1.value;i++){
-                    for(let j=0;j<exp2.value;j++){
-                        valueB.push('*')
+                if(this.type == Type.INT){
+                    for(let i=0;i<exp1.value+1;i++){
+                        for(let j=0;j<exp2.value+1;j++){
+                            valueB.push(0)
+                        }
+                        valueA.push(valueB)
+                        valueB = []
                     }
-                    valueA.push(valueB)
-                    valueB = []
+                }else if(this.type == Type.DOUBLE){
+                    for(let i=0;i<exp1.value+1;i++){
+                        for(let j=0;j<exp2.value+1;j++){
+                            valueB.push(0.0)
+                        }
+                        valueA.push(valueB)
+                        valueB = []
+                    }
+                }else if(this.type == Type.BOOLEAN){
+                    for(let i=0;i<exp1.value+1;i++){
+                        for(let j=0;j<exp2.value+1;j++){
+                            valueB.push(true)
+                        }
+                        valueA.push(valueB)
+                        valueB = []
+                    }
+                }else if(this.type == Type.CHAR){
+                    for(let i=0;i<exp1.value+1;i++){
+                        for(let j=0;j<exp2.value+1;j++){
+                            valueB.push('0')
+                        }
+                        valueA.push(valueB)
+                        valueB = []
+                    }
+                }else if(this.type == Type.STRING){
+                    for(let i=0;i<exp1.value+1;i++){
+                        for(let j=0;j<exp2.value+1;j++){
+                            valueB.push("")
+                        }
+                        valueA.push(valueB)
+                        valueB = []
+                    }
                 }
+                
                 console.log(valueA)
                 const aux = env.saveVar(this.id,valueA,this.type)
                 if (aux){

@@ -31,7 +31,99 @@ var Rational = /** @class */ (function (_super) {
         var izq = this.left.run(env);
         var der = this.right.run(env);
         if (this.type == RationalOption.IGUALQ) {
-            if (izq.type == type_1.Type.INT && der.type == type_1.Type.INT) {
+            if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
+                if (izq.value == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.DOUBLE) || (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.INT)) {
+                if (izq.value == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value == tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value == tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
+                if (izq.value == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value == tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value == tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.CHAR && der.type == type_1.Type.CHAR) {
+                if (izq.value == der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.STRING && der.type == type_1.Type.STRING) {
                 if (izq.value == der.value) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }
@@ -40,7 +132,99 @@ var Rational = /** @class */ (function (_super) {
             }
         }
         else if (this.type == RationalOption.MAYORQ) {
-            if (izq.type == type_1.Type.INT && der.type == type_1.Type.INT) {
+            if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
+                if (izq.value > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.DOUBLE) || (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.INT)) {
+                if (izq.value > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value > tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value > tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
+                if (izq.value > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value > tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value > tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.CHAR && der.type == type_1.Type.CHAR) {
+                if (izq.value > der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.STRING && der.type == type_1.Type.STRING) {
                 if (izq.value > der.value) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }
@@ -49,7 +233,99 @@ var Rational = /** @class */ (function (_super) {
             }
         }
         else if (this.type == RationalOption.MENORQ) {
-            if (izq.type == type_1.Type.INT && der.type == type_1.Type.INT) {
+            if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
+                if (izq.value < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.DOUBLE) || (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.INT)) {
+                if (izq.value < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value < tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value < tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
+                if (izq.value < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value < tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value < tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.CHAR && der.type == type_1.Type.CHAR) {
+                if (izq.value < der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.STRING && der.type == type_1.Type.STRING) {
                 if (izq.value < der.value) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }
@@ -58,7 +334,99 @@ var Rational = /** @class */ (function (_super) {
             }
         }
         else if (this.type == RationalOption.MAYORIGQ) {
-            if (izq.type == type_1.Type.INT && der.type == type_1.Type.INT) {
+            if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
+                if (izq.value >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.DOUBLE) || (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.INT)) {
+                if (izq.value >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value >= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value >= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
+                if (izq.value >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value >= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value >= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.CHAR && der.type == type_1.Type.CHAR) {
+                if (izq.value >= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.STRING && der.type == type_1.Type.STRING) {
                 if (izq.value >= der.value) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }
@@ -67,7 +435,99 @@ var Rational = /** @class */ (function (_super) {
             }
         }
         else if (this.type == RationalOption.MENORIGQ) {
-            if (izq.type == type_1.Type.INT && der.type == type_1.Type.INT) {
+            if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
+                if (izq.value <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.DOUBLE) || (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.INT)) {
+                if (izq.value <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value <= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value <= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
+                if (izq.value <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value <= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value <= tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.CHAR && der.type == type_1.Type.CHAR) {
+                if (izq.value <= der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.STRING && der.type == type_1.Type.STRING) {
                 if (izq.value <= der.value) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }
@@ -76,7 +536,99 @@ var Rational = /** @class */ (function (_super) {
             }
         }
         else if (this.type == RationalOption.NOIGUAL) {
-            if (izq.type == type_1.Type.INT && der.type == type_1.Type.INT) {
+            if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
+                if (izq.value != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.DOUBLE) || (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.INT)) {
+                if (izq.value != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value != tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.INT && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.INT && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value != tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
+                if (izq.value != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.BOOLEAN)) {
+                var tmp = (izq.value) ? 1 : 0;
+                if (tmp != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.BOOLEAN)) {
+                var tmp = (der.value) ? 1 : 0;
+                if (izq.value != tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.CHAR)) {
+                var tmp = (izq.value).charCodeAt(0);
+                if (tmp != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if ((izq.type == type_1.Type.DOUBLE && der.type == type_1.Type.CHAR)) {
+                var tmp = (der.value).charCodeAt(0);
+                if (izq.value != tmp) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.CHAR && der.type == type_1.Type.CHAR) {
+                if (izq.value != der.value) {
+                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                }
+                else
+                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else if (izq.type == type_1.Type.STRING && der.type == type_1.Type.STRING) {
                 if (izq.value != der.value) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }

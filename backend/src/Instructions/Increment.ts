@@ -5,7 +5,7 @@ import { Type } from "../Symbol/type";
 
 export class Increment extends Instruction {
     constructor(
-      public nombre: string,
+      public nombre: string,  
       public type:number,
       line: number,
       column: number
