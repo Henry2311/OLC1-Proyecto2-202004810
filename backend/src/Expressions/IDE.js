@@ -30,27 +30,29 @@ var IDE = /** @class */ (function (_super) {
     }
     IDE.prototype.run = function (env) {
         var _a, _b;
+        console.log(this.id + " TIPO: " + env.getType(this.id));
         if (this.sw == 0) {
             if (env.getType(this.id) == type_1.Type.INT) {
-                return { value: Number(env.getValue(this.id)), type: type_1.Type.INT };
+                console.log(env.getValue(this.id));
+                return { value: env.getValue(this.id), type: type_1.Type.INT };
             }
             else if (env.getType(this.id) == type_1.Type.DOUBLE) {
-                return { value: Number(env.getValue(this.id)), type: type_1.Type.DOUBLE };
+                return { value: env.getValue(this.id), type: type_1.Type.DOUBLE };
             }
             else if (env.getType(this.id) == type_1.Type.STRING) {
-                var value = env.getValue(this.id).replaceAll("\"", "");
+                var value = env.getValue(this.id);
                 return { value: value, type: type_1.Type.STRING };
             }
             else if (env.getType(this.id) == type_1.Type.CHAR) {
-                var value = env.getValue(this.id).replaceAll("\"", "");
+                var value = env.getValue(this.id);
                 return { value: value, type: type_1.Type.CHAR };
             }
             else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
                 console.log("VALOR EN VARIABLE" + env.getValue(this.id));
                 if (env.getValue(this.id) == "true" || env.getValue(this.id))
-                    return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                    return { value: env.getValue(this.id), type: type_1.Type.BOOLEAN };
                 else
-                    return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+                    return { value: env.getValue(this.id), type: type_1.Type.BOOLEAN };
             }
             else
                 return { value: env.getValue(this.id), type: type_1.Type.error };
@@ -65,10 +67,10 @@ var IDE = /** @class */ (function (_super) {
                     var value = tmp[exp1.value];
                     console.log("VALOR DEL VECTOR: " + value);
                     if (env.getType(this.id) == type_1.Type.INT) {
-                        return { value: Number(value), type: type_1.Type.INT };
+                        return { value: value, type: type_1.Type.INT };
                     }
                     else if (env.getType(this.id) == type_1.Type.DOUBLE) {
-                        return { value: Number(value), type: type_1.Type.DOUBLE };
+                        return { value: value, type: type_1.Type.DOUBLE };
                     }
                     else if (env.getType(this.id) == type_1.Type.STRING) {
                         value = value.replaceAll("\"", "");
@@ -80,9 +82,9 @@ var IDE = /** @class */ (function (_super) {
                     }
                     else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
                         if (env.getValue(this.id) == "true" || env.getValue(this.id))
-                            return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                            return { value: true, type: type_1.Type.BOOLEAN };
                         else
-                            return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+                            return { value: false, type: type_1.Type.BOOLEAN };
                     }
                     else
                         return { value: env.getValue(this.id), type: type_1.Type.error };
@@ -98,10 +100,10 @@ var IDE = /** @class */ (function (_super) {
                     var value = tmp[exp1.value][exp2.value];
                     console.log("VALOR DEL MATRIZ: " + value);
                     if (env.getType(this.id) == type_1.Type.INT) {
-                        return { value: Number(value), type: type_1.Type.INT };
+                        return { value: value, type: type_1.Type.INT };
                     }
                     else if (env.getType(this.id) == type_1.Type.DOUBLE) {
-                        return { value: Number(value), type: type_1.Type.DOUBLE };
+                        return { value: value, type: type_1.Type.DOUBLE };
                     }
                     else if (env.getType(this.id) == type_1.Type.STRING) {
                         value = value.replaceAll("\"", "");
@@ -113,9 +115,9 @@ var IDE = /** @class */ (function (_super) {
                     }
                     else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
                         if (env.getValue(this.id) == "true" || env.getValue(this.id))
-                            return { value: Boolean(true), type: type_1.Type.BOOLEAN };
+                            return { value: true, type: type_1.Type.BOOLEAN };
                         else
-                            return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+                            return { value: false, type: type_1.Type.BOOLEAN };
                     }
                     else
                         return { value: env.getValue(this.id), type: type_1.Type.error };
@@ -126,6 +128,8 @@ var IDE = /** @class */ (function (_super) {
             }
         }
         return { value: env.getValue(this.id), type: type_1.Type.error };
+    };
+    IDE.prototype.save = function (env) {
     };
     return IDE;
 }(Expression_1.Expression));

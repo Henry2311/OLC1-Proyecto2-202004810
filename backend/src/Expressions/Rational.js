@@ -638,6 +638,8 @@ var Rational = /** @class */ (function (_super) {
         }
         return { value: Boolean(false), type: type_1.Type.BOOLEAN };
     };
+    Rational.prototype.save = function (env) {
+    };
     return Rational;
 }(Expression_1.Expression));
 exports.Rational = Rational;

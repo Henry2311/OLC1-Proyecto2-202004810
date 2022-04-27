@@ -26,4 +26,5 @@ export class Ternary extends Instruction {
             return { value: expFalse.value, type: expFalse.type}
         }
     }
+    public save(env:ENV){}
   }

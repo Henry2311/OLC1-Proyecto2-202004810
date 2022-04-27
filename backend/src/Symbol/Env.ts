@@ -1,3 +1,5 @@
+import { Instruction } from "../Abstract/Instruction";
+import { Declaracion } from "../Instructions/Declaracion";
 import { Symbol } from "./Symbol";
 import { Type } from "./type";
 
@@ -12,10 +14,10 @@ export class ENV{
         return this.tablaSimbolos
     }
     
-    public saveVar(nombre: string, valor: any, type: Type): boolean {
+    public saveVar(nombre: string, valor: any, type: Type,ins:Array<Instruction>|null,param:Array<Declaracion>|null): boolean {
     
         if(!this.search(nombre)){
-          this.tablaSimbolos.set(nombre, new Symbol(valor, nombre, type));
+          this.tablaSimbolos.set(nombre, new Symbol(valor, nombre, type,ins,param));
           return true
         }
         console.log("esta variable ["+nombre+"] ya existe...");
@@ -72,5 +74,22 @@ export class ENV{
             env = env.anterior
         }
         return null
+    }
+
+    public getFunction(nombre:string):Symbol{
+        let env: ENV | null = this;
+        while (env != null) {
+            for (let entry of Array.from(env.tablaSimbolos.entries())) {
+                if (entry[0] == nombre) {
+                    if( entry[1].value == null){
+                        return entry[1]
+                    }else{
+                        console.log("No es una funcion")    
+                    }
+                }
+            }
+            env = env.anterior
+        }
+        return { value: null, id: "", type: Type.error, instruction: null, parameter: null}
     }
 }

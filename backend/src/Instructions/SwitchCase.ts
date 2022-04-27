@@ -20,7 +20,7 @@ export class SwitchCase extends Instruction{
                     if(this.instructions!=null){
                         const newEnv = new ENV(env)
                         for(const ins of this.instructions){
-                            ins.run(newEnv)
+                            if(ins!=null) ins.run(newEnv)
                         }
                         return 1
                     }
@@ -30,7 +30,7 @@ export class SwitchCase extends Instruction{
                     if(this.instructions!=null){
                         const newEnv = new ENV(env)
                         for(const ins of this.instructions){
-                            ins.run(newEnv)
+                            if(ins!=null) ins.run(newEnv)
                         }
                         return 0
                     }
@@ -39,4 +39,5 @@ export class SwitchCase extends Instruction{
         }
         return 0
     }
+    public save(env:ENV){}
 }

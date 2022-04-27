@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.Println = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
 var Println = /** @class */ (function (_super) {
     __extends(Println, _super);
     function Println(expresion, line, column) {
@@ -25,10 +26,12 @@ var Println = /** @class */ (function (_super) {
         return _this;
     }
     Println.prototype.run = function (env) {
+        var s = Singleton_1.Singleton.getInstance();
         var exp = this.expresion.run(env);
         console.log(">>", exp.value);
-        //pueden usar patron singleton para capturar todas las saliddas de consola
+        s.addConsola(exp.value + "\n");
     };
+    Println.prototype.save = function (env) { };
     return Println;
 }(Instruction_1.Instruction));
 exports.Println = Println;

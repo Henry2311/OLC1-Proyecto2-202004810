@@ -20,50 +20,51 @@ var Instruction_1 = require("../Abstract/Instruction");
 var type_1 = require("../Symbol/type");
 var DeclaracionV = /** @class */ (function (_super) {
     __extends(DeclaracionV, _super);
-    function DeclaracionV(id, type, expression1, expression2, list, sw, line, column) {
+    function DeclaracionV(id, type, expression1, expression2, list, fun, sw, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.id = id;
         _this.type = type;
         _this.expression1 = expression1;
         _this.expression2 = expression2;
         _this.list = list;
+        _this.fun = fun;
         _this.sw = sw;
         return _this;
     }
     DeclaracionV.prototype.run = function (env) {
-        var _a, _b;
+        var _a, _b, _c;
         var exp1 = (_a = this.expression1) === null || _a === void 0 ? void 0 : _a.run(env);
         var exp2 = (_b = this.expression2) === null || _b === void 0 ? void 0 : _b.run(env);
         if (exp1 != null && exp2 == null && this.list == null) {
             if (exp1.type == type_1.Type.INT) {
                 var valueA = [];
                 if (this.type == type_1.Type.INT) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
+                    for (var i = 0; i < exp1.value; i++) {
                         valueA.push(0);
                     }
                 }
                 else if (this.type == type_1.Type.DOUBLE) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
+                    for (var i = 0; i < exp1.value; i++) {
                         valueA.push(0.0);
                     }
                 }
                 else if (this.type == type_1.Type.BOOLEAN) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
+                    for (var i = 0; i < exp1.value; i++) {
                         valueA.push(true);
                     }
                 }
                 else if (this.type == type_1.Type.CHAR) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
+                    for (var i = 0; i < exp1.value; i++) {
                         valueA.push('0');
                     }
                 }
                 else if (this.type == type_1.Type.STRING) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
+                    for (var i = 0; i < exp1.value; i++) {
                         valueA.push("");
                     }
                 }
                 console.log(valueA);
-                var aux = env.saveVar(this.id, valueA, this.type);
+                var aux = env.saveVar(this.id, valueA, this.type, null, null);
                 if (aux) {
                     console.log("vector [" + this.id + "] ingresada...");
                 }
@@ -80,8 +81,8 @@ var DeclaracionV = /** @class */ (function (_super) {
                 var valueA = [];
                 var valueB = [];
                 if (this.type == type_1.Type.INT) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
-                        for (var j = 0; j < exp2.value + 1; j++) {
+                    for (var i = 0; i < exp1.value; i++) {
+                        for (var j = 0; j < exp2.value; j++) {
                             valueB.push(0);
                         }
                         valueA.push(valueB);
@@ -89,8 +90,8 @@ var DeclaracionV = /** @class */ (function (_super) {
                     }
                 }
                 else if (this.type == type_1.Type.DOUBLE) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
-                        for (var j = 0; j < exp2.value + 1; j++) {
+                    for (var i = 0; i < exp1.value; i++) {
+                        for (var j = 0; j < exp2.value; j++) {
                             valueB.push(0.0);
                         }
                         valueA.push(valueB);
@@ -98,8 +99,8 @@ var DeclaracionV = /** @class */ (function (_super) {
                     }
                 }
                 else if (this.type == type_1.Type.BOOLEAN) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
-                        for (var j = 0; j < exp2.value + 1; j++) {
+                    for (var i = 0; i < exp1.value; i++) {
+                        for (var j = 0; j < exp2.value; j++) {
                             valueB.push(true);
                         }
                         valueA.push(valueB);
@@ -107,8 +108,8 @@ var DeclaracionV = /** @class */ (function (_super) {
                     }
                 }
                 else if (this.type == type_1.Type.CHAR) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
-                        for (var j = 0; j < exp2.value + 1; j++) {
+                    for (var i = 0; i < exp1.value; i++) {
+                        for (var j = 0; j < exp2.value; j++) {
                             valueB.push('0');
                         }
                         valueA.push(valueB);
@@ -116,8 +117,8 @@ var DeclaracionV = /** @class */ (function (_super) {
                     }
                 }
                 else if (this.type == type_1.Type.STRING) {
-                    for (var i = 0; i < exp1.value + 1; i++) {
-                        for (var j = 0; j < exp2.value + 1; j++) {
+                    for (var i = 0; i < exp1.value; i++) {
+                        for (var j = 0; j < exp2.value; j++) {
                             valueB.push("");
                         }
                         valueA.push(valueB);
@@ -125,7 +126,7 @@ var DeclaracionV = /** @class */ (function (_super) {
                     }
                 }
                 console.log(valueA);
-                var aux = env.saveVar(this.id, valueA, this.type);
+                var aux = env.saveVar(this.id, valueA, this.type, null, null);
                 if (aux) {
                     console.log("vector 2D [" + this.id + "] ingresada...");
                 }
@@ -145,12 +146,17 @@ var DeclaracionV = /** @class */ (function (_super) {
                 }
                 var aux = false;
                 for (var i = 0; i < this.list.length; i++) {
-                    (this.list[i].type == this.type) ? aux = true : aux = false;
+                    if (this.list[i].type == this.type) {
+                        aux = true;
+                        this.list[i] = this.list[i].value;
+                    }
+                    else
+                        aux = false;
                     if (!aux)
                         break;
                 }
                 if (aux) {
-                    var aux_1 = env.saveVar(this.id, this.list, this.type);
+                    var aux_1 = env.saveVar(this.id, this.list, this.type, null, null);
                     if (aux_1) {
                         console.log("vector [" + this.id + "] ingresada... ");
                     }
@@ -159,7 +165,7 @@ var DeclaracionV = /** @class */ (function (_super) {
                     }
                 }
             }
-            else {
+            else if (this.sw == 1) {
                 //matriz
                 for (var i = 0; i < this.list.length; i++) {
                     for (var j = 0; j < this.list[i].length; j++) {
@@ -169,13 +175,18 @@ var DeclaracionV = /** @class */ (function (_super) {
                 var aux = false;
                 for (var i = 0; i < this.list.length; i++) {
                     for (var j = 0; j < this.list[i].length; j++) {
-                        (this.list[i][j].type == this.type) ? aux = true : aux = false;
+                        if (this.list[i][j].type == this.type) {
+                            aux = true;
+                            this.list[i][j] = this.list[i][j].value;
+                        }
+                        else
+                            aux = false;
                         if (!aux)
                             break;
                     }
                 }
                 if (aux) {
-                    var aux_2 = env.saveVar(this.id, this.list, this.type);
+                    var aux_2 = env.saveVar(this.id, this.list, this.type, null, null);
                     if (aux_2) {
                         console.log("vector 2D [" + this.id + "] ingresada... ");
                     }
@@ -185,6 +196,26 @@ var DeclaracionV = /** @class */ (function (_super) {
                 }
             }
         }
+        else if (exp1 == null && exp2 == null && this.list == null && this.fun != null) {
+            var arr = (_c = this.fun) === null || _c === void 0 ? void 0 : _c.run(env);
+            if (arr != null) {
+                var valor = [];
+                for (var _i = 0, _d = arr.value; _i < _d.length; _i++) {
+                    var i = _d[_i];
+                    valor.push(i);
+                }
+                console.log(arr.value);
+                var aux = env.saveVar(this.id, valor, type_1.Type.CHAR, null, null);
+                if (aux) {
+                    console.log("vector 2D [" + this.id + "] ingresada... ");
+                }
+                else {
+                    console.log("vector 2D [" + this.id + "] no ingresada...");
+                }
+            }
+        }
+    };
+    DeclaracionV.prototype.save = function (env) {
     };
     return DeclaracionV;
 }(Instruction_1.Instruction));

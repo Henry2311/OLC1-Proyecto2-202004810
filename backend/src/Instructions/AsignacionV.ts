@@ -42,4 +42,6 @@ export class AsignacionV extends Instruction{
         }
 
     }
+    public save(env: ENV) {
+    }
 }

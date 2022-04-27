@@ -394,6 +394,8 @@ export class Rational extends Expression{
             }
             return { value: Boolean(false), type: Type.BOOLEAN }
         }
+        public save(env: ENV) {
+        }
 
 }
 

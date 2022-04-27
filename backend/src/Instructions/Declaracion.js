@@ -37,7 +37,7 @@ var Declaracion = /** @class */ (function (_super) {
             var names = id_list_1[_i];
             if (exp != null) {
                 if (exp.type == this.type) {
-                    var aux = env.saveVar(names, exp.value, this.type);
+                    var aux = env.saveVar(names, exp.value, this.type, null, null);
                     if (aux) {
                         console.log("variable [" + names + "] ingresada...");
                     }
@@ -52,19 +52,19 @@ var Declaracion = /** @class */ (function (_super) {
             else {
                 var aux = void 0;
                 if (this.type == type_1.Type.INT) {
-                    aux = env.saveVar(names, 0, this.type);
+                    aux = env.saveVar(names, 0, this.type, null, null);
                 }
                 else if (this.type == type_1.Type.DOUBLE) {
-                    aux = env.saveVar(names, 0.0, this.type);
+                    aux = env.saveVar(names, 0.0, this.type, null, null);
                 }
                 else if (this.type == type_1.Type.STRING) {
-                    aux = env.saveVar(names, "", this.type);
+                    aux = env.saveVar(names, "", this.type, null, null);
                 }
                 else if (this.type == type_1.Type.CHAR) {
-                    aux = env.saveVar(names, '', this.type);
+                    aux = env.saveVar(names, '', this.type, null, null);
                 }
                 else if (this.type == type_1.Type.BOOLEAN) {
-                    aux = env.saveVar(names, true, this.type);
+                    aux = env.saveVar(names, true, this.type, null, null);
                 }
                 if (aux) {
                     console.log("variable [" + names + "] ingresada...");
@@ -74,6 +74,8 @@ var Declaracion = /** @class */ (function (_super) {
                 }
             }
         }
+    };
+    Declaracion.prototype.save = function (env) {
     };
     return Declaracion;
 }(Instruction_1.Instruction));

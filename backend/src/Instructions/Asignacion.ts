@@ -30,4 +30,6 @@ export class Asignacion extends Instruction {
       }
       
     }
+    public save(env: ENV) {
+    }
   }

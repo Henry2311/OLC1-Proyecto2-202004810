@@ -11,9 +11,9 @@ var ENV = /** @class */ (function () {
     ENV.prototype.getEnv = function () {
         return this.tablaSimbolos;
     };
-    ENV.prototype.saveVar = function (nombre, valor, type) {
+    ENV.prototype.saveVar = function (nombre, valor, type, ins, param) {
         if (!this.search(nombre)) {
-            this.tablaSimbolos.set(nombre, new Symbol_1.Symbol(valor, nombre, type));
+            this.tablaSimbolos.set(nombre, new Symbol_1.Symbol(valor, nombre, type, ins, param));
             return true;
         }
         console.log("esta variable [" + nombre + "] ya existe...");
@@ -69,6 +69,24 @@ var ENV = /** @class */ (function () {
             env = env.anterior;
         }
         return null;
+    };
+    ENV.prototype.getFunction = function (nombre) {
+        var env = this;
+        while (env != null) {
+            for (var _i = 0, _a = Array.from(env.tablaSimbolos.entries()); _i < _a.length; _i++) {
+                var entry = _a[_i];
+                if (entry[0] == nombre) {
+                    if (entry[1].value == null) {
+                        return entry[1];
+                    }
+                    else {
+                        console.log("No es una funcion");
+                    }
+                }
+            }
+            env = env.anterior;
+        }
+        return { value: null, id: "", type: type_1.Type.error, instruction: null, parameter: null };
     };
     return ENV;
 }());

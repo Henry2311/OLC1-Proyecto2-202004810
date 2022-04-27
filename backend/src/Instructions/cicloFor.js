@@ -18,36 +18,50 @@ exports.__esModule = true;
 exports.cicloFor = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
 var Env_1 = require("../Symbol/Env");
+var type_1 = require("../Symbol/type");
 var cicloFor = /** @class */ (function (_super) {
     __extends(cicloFor, _super);
-    function cicloFor(declaraccion, condicon, incremento, bloque, line, column) {
+    function cicloFor(declaraccion, condicon, incremento, bloque, transfer, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.declaraccion = declaraccion;
         _this.condicon = condicon;
         _this.incremento = incremento;
         _this.bloque = bloque;
+        _this.transfer = transfer;
         return _this;
     }
     cicloFor.prototype.run = function (env) {
-        //creamos un nuevo env
         var newEnv = new Env_1.ENV(env);
-        //ejecutamos la primera instuccion que puede ser una declaracion
         this.declaraccion.run(newEnv);
-        //tipo boolean
-        //por cada iteracion necesitamos 
+        var aux;
         while (this.condicon.run(newEnv).value) {
             if (this.bloque != null)
                 for (var _i = 0, _a = this.bloque; _i < _a.length; _i++) {
                     var inst = _a[_i];
-                    inst.run(newEnv); //bloque
+                    var t = void 0;
+                    if (inst != null)
+                        t = inst.run(newEnv);
+                    if (t == type_1.Type.BREAK) {
+                        aux = type_1.Type.BREAK;
+                        break;
+                    }
+                    else if (t == type_1.Type.CONTINUE) {
+                        aux = type_1.Type.CONTINUE;
+                        continue;
+                    }
                 }
             this.incremento.run(newEnv);
+            if (this.transfer != null || aux != null) {
+                if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
+                    break;
+                }
+                else if (this.transfer == type_1.Type.CONTINUE || aux == type_1.Type.CONTINUE) {
+                    continue;
+                }
+            }
         }
-        //puden usar una funcion while, la condicion para repetir el ciclo lo sacamos desde la condicion con un execute() y ejecutamos el incremento(en este momento no lo cree), despues se vuelve hacer la conidicon para que el while sepa si se hace otra vez
-        // while(this.condicon.execute(newEnv).value){
-        //   this.bloque.execute()
-        //   this.incremento.execute()
-        // }
+    };
+    cicloFor.prototype.save = function (env) {
     };
     return cicloFor;
 }(Instruction_1.Instruction));

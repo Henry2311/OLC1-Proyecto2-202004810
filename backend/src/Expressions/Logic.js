@@ -62,6 +62,8 @@ var Logic = /** @class */ (function (_super) {
         }
         return { value: Boolean(false), type: type_1.Type.BOOLEAN };
     };
+    Logic.prototype.save = function (env) {
+    };
     return Logic;
 }(Expression_1.Expression));
 exports.Logic = Logic;

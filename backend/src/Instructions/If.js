@@ -18,13 +18,15 @@ exports.__esModule = true;
 exports.Ifsentencia = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
 var Env_1 = require("../Symbol/Env");
+var type_1 = require("../Symbol/type");
 var Ifsentencia = /** @class */ (function (_super) {
     __extends(Ifsentencia, _super);
-    function Ifsentencia(logic, instruction, next, line, column) {
+    function Ifsentencia(logic, instruction, next, transfer, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.logic = logic;
         _this.instruction = instruction;
         _this.next = next;
+        _this.transfer = transfer;
         return _this;
     }
     Ifsentencia.prototype.run = function (env) {
@@ -36,8 +38,20 @@ var Ifsentencia = /** @class */ (function (_super) {
                 if (this.instruction != null)
                     for (var _i = 0, _b = this.instruction; _i < _b.length; _i++) {
                         var inst = _b[_i];
-                        inst.run(newEnv);
+                        if (inst != null)
+                            inst.run(newEnv);
                     }
+                if (this.transfer != null) {
+                    if (this.transfer == type_1.Type.BREAK) {
+                        return type_1.Type.BREAK;
+                    }
+                    else if (this.transfer == type_1.Type.CONTINUE) {
+                        return type_1.Type.CONTINUE;
+                    }
+                    else {
+                        return null;
+                    }
+                }
             }
         }
         if (logica != null && this.next != null) {
@@ -46,11 +60,32 @@ var Ifsentencia = /** @class */ (function (_super) {
                 if (this.instruction != null)
                     for (var _c = 0, _d = this.instruction; _c < _d.length; _c++) {
                         var inst = _d[_c];
-                        inst.run(newEnv);
+                        if (inst != null)
+                            inst.run(newEnv);
                     }
+                if (this.transfer != null) {
+                    if (this.transfer == type_1.Type.BREAK) {
+                        return type_1.Type.BREAK;
+                    }
+                    else if (this.transfer == type_1.Type.CONTINUE) {
+                        return type_1.Type.CONTINUE;
+                    }
+                    else {
+                        return null;
+                    }
+                }
             }
             else {
-                this.next.run(env);
+                var t = this.next.run(env);
+                if (t == type_1.Type.BREAK) {
+                    return type_1.Type.BREAK;
+                }
+                else if (t == type_1.Type.CONTINUE) {
+                    return type_1.Type.CONTINUE;
+                }
+                else {
+                    return null;
+                }
             }
         }
         if (logica == null && this.next == null) {
@@ -58,9 +93,23 @@ var Ifsentencia = /** @class */ (function (_super) {
             if (this.instruction != null)
                 for (var _e = 0, _f = this.instruction; _e < _f.length; _e++) {
                     var inst = _f[_e];
-                    inst.run(newEnv);
+                    if (inst != null)
+                        inst.run(newEnv);
                 }
+            if (this.transfer != null) {
+                if (this.transfer == type_1.Type.BREAK) {
+                    return type_1.Type.BREAK;
+                }
+                else if (this.transfer == type_1.Type.CONTINUE) {
+                    return type_1.Type.CONTINUE;
+                }
+                else {
+                    return null;
+                }
+            }
         }
+    };
+    Ifsentencia.prototype.save = function (env) {
     };
     return Ifsentencia;
 }(Instruction_1.Instruction));

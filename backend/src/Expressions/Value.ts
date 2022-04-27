@@ -1,5 +1,6 @@
 import { Expression } from "../Abstract/Expression"
 import { Return } from "../Abstract/Return"
+import { ENV } from "../Symbol/Env"
 import { Type } from "../Symbol/type"
 
 export class Value extends Expression {
@@ -33,5 +34,7 @@ export class Value extends Expression {
         }
         else return { value: this.value, type: Type.error }
 
+    }
+    public save(env: ENV) {
     }
 }

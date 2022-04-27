@@ -52,6 +52,8 @@ var Value = /** @class */ (function (_super) {
         else
             return { value: this.value, type: type_1.Type.error };
     };
+    Value.prototype.save = function (env) {
+    };
     return Value;
 }(Expression_1.Expression));
 exports.Value = Value;

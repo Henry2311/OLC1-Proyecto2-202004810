@@ -10,4 +10,5 @@ export abstract class Expression {
 
     public abstract run(env: ENV): Return
     
+    public abstract save(env:ENV):any;
 }

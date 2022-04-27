@@ -56,6 +56,8 @@ var AsignacionV = /** @class */ (function (_super) {
             }
         }
     };
+    AsignacionV.prototype.save = function (env) {
+    };
     return AsignacionV;
 }(Instruction_1.Instruction));
 exports.AsignacionV = AsignacionV;

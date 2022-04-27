@@ -36,7 +36,8 @@ var SwitchCase = /** @class */ (function (_super) {
                         var newEnv = new Env_1.ENV(env);
                         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                             var ins = _a[_i];
-                            ins.run(newEnv);
+                            if (ins != null)
+                                ins.run(newEnv);
                         }
                         return 1;
                     }
@@ -48,7 +49,8 @@ var SwitchCase = /** @class */ (function (_super) {
                         var newEnv = new Env_1.ENV(env);
                         for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
                             var ins = _c[_b];
-                            ins.run(newEnv);
+                            if (ins != null)
+                                ins.run(newEnv);
                         }
                         return 0;
                     }
@@ -57,6 +59,7 @@ var SwitchCase = /** @class */ (function (_super) {
         }
         return 0;
     };
+    SwitchCase.prototype.save = function (env) { };
     return SwitchCase;
 }(Instruction_1.Instruction));
 exports.SwitchCase = SwitchCase;

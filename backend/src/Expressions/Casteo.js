@@ -62,6 +62,8 @@ var Casteo = /** @class */ (function (_super) {
         }
         return { value: null, type: type_1.Type.error };
     };
+    Casteo.prototype.save = function (env) {
+    };
     return Casteo;
 }(Expression_1.Expression));
 exports.Casteo = Casteo;

@@ -39,6 +39,8 @@ export class Logic extends Expression{
         
         return { value: Boolean(false), type: Type.BOOLEAN }
     }
+    public save(env: ENV) {
+    }
 }
 
 export enum LogicOption{

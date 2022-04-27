@@ -43,4 +43,7 @@ export class Casteo extends Expression{
 
             return{ value: null, type: Type.error}
         }
+
+        public save(env: ENV) {
+        }
 }

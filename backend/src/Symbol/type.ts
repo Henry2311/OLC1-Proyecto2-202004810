@@ -5,4 +5,8 @@ export enum Type {
     CHAR,
     BOOLEAN,
     error,
+    BREAK,
+    CONTINUE,
+    RETURN,
+    VOID
   }

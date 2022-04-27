@@ -230,16 +230,18 @@ var Arithmetic = /** @class */ (function (_super) {
         }
         return { value: null, type: type_1.Type.error };
     };
+    Arithmetic.prototype.save = function (env) {
+    };
     return Arithmetic;
 }(Expression_1.Expression));
 exports.Arithmetic = Arithmetic;
 var ArithmeticOption;
 (function (ArithmeticOption) {
-    /*0*/ ArithmeticOption[ArithmeticOption["MAS"] = 0] = "MAS";
-    /*1*/ ArithmeticOption[ArithmeticOption["MENOS"] = 1] = "MENOS";
-    /*2*/ ArithmeticOption[ArithmeticOption["POR"] = 2] = "POR";
-    /*3*/ ArithmeticOption[ArithmeticOption["DIV"] = 3] = "DIV";
-    /*4*/ ArithmeticOption[ArithmeticOption["MOD"] = 4] = "MOD";
-    /*5*/ ArithmeticOption[ArithmeticOption["POW"] = 5] = "POW";
-    /*6*/ ArithmeticOption[ArithmeticOption["NEGACION"] = 6] = "NEGACION";
+    ArithmeticOption[ArithmeticOption["MAS"] = 0] = "MAS";
+    ArithmeticOption[ArithmeticOption["MENOS"] = 1] = "MENOS";
+    ArithmeticOption[ArithmeticOption["POR"] = 2] = "POR";
+    ArithmeticOption[ArithmeticOption["DIV"] = 3] = "DIV";
+    ArithmeticOption[ArithmeticOption["MOD"] = 4] = "MOD";
+    ArithmeticOption[ArithmeticOption["POW"] = 5] = "POW";
+    ArithmeticOption[ArithmeticOption["NEGACION"] = 6] = "NEGACION";
 })(ArithmeticOption = exports.ArithmeticOption || (exports.ArithmeticOption = {}));

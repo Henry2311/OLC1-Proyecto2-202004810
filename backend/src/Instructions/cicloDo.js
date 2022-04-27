@@ -18,25 +18,48 @@ exports.__esModule = true;
 exports.cicloDo = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
 var Env_1 = require("../Symbol/Env");
+var type_1 = require("../Symbol/type");
 var cicloDo = /** @class */ (function (_super) {
     __extends(cicloDo, _super);
-    function cicloDo(logic, instruction, line, column) {
+    function cicloDo(logic, instruction, transfer, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.logic = logic;
         _this.instruction = instruction;
+        _this.transfer = transfer;
         return _this;
     }
     cicloDo.prototype.run = function (env) {
         var logica = this.logic.run(env);
         var newEnv = new Env_1.ENV(env);
+        var aux;
         do {
             if (this.instruction != null)
                 for (var _i = 0, _a = this.instruction; _i < _a.length; _i++) {
                     var inst = _a[_i];
-                    inst.run(newEnv);
+                    var t = void 0;
+                    if (inst != null)
+                        t = inst.run(newEnv);
+                    if (t == type_1.Type.BREAK) {
+                        aux = type_1.Type.BREAK;
+                        break;
+                    }
+                    else if (t == type_1.Type.CONTINUE) {
+                        aux = type_1.Type.CONTINUE;
+                        continue;
+                    }
                 }
             logica = this.logic.run(env);
+            if (this.transfer != null || aux != null) {
+                if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
+                    break;
+                }
+                else if (this.transfer == type_1.Type.CONTINUE || aux == type_1.Type.CONTINUE) {
+                    continue;
+                }
+            }
         } while (logica.value);
+    };
+    cicloDo.prototype.save = function (env) {
     };
     return cicloDo;
 }(Instruction_1.Instruction));

@@ -1,6 +1,7 @@
 import { Expression } from "../Abstract/Expression";
 import { Instruction } from "../Abstract/Instruction";
 import { ENV } from "../Symbol/Env";
+import { Singleton } from "../Pattern/Singleton";
 
 export class Print extends Instruction {
     constructor(
@@ -12,10 +13,11 @@ export class Print extends Instruction {
     }
   
     public run(env: ENV) {
-      
+      var s = Singleton.getInstance()
       let exp= this.expresion.run(env)
       console.log(">>",exp.value);
-      //pueden usar patron singleton para capturar todas las saliddas de consola
+      s.addConsola(exp.value+"")
       
     }
+    public save(env:ENV){}
   }

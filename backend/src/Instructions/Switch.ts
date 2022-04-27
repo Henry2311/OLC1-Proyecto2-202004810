@@ -18,17 +18,18 @@ export class Switch extends Instruction{
         let brk;
         if(this.cases!=null){
             const newEnv = new ENV(env)
-            newEnv.saveVar("__compare__",exp.value,exp.type)
+            newEnv.saveVar("__compare__",exp.value,exp.type,null,null)
             for(const csc of this.cases){
-                brk = csc.run(newEnv)
+                if(csc!=null)brk = csc.run(newEnv)
                 if(brk==1)break
             }
         }
         if(this.def != null && brk == 0){
             const newEnv = new ENV(env)
             for(const ins of this.def){
-                ins.run(newEnv)
+                if(ins!=null)ins.run(newEnv)
             }
         }
     }
+    public save(env:ENV){}
 }

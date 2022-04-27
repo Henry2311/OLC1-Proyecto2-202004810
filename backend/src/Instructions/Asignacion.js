@@ -41,6 +41,8 @@ var Asignacion = /** @class */ (function (_super) {
             console.log("la variable [" + this.nombre + "] no fue encontrada...");
         }
     };
+    Asignacion.prototype.save = function (env) {
+    };
     return Asignacion;
 }(Instruction_1.Instruction));
 exports.Asignacion = Asignacion;

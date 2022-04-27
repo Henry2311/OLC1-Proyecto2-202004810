@@ -17,21 +17,23 @@ export class IDE extends Expression {
     }
 
     public run(env:ENV): Return {
+        console.log(this.id+" TIPO: "+env.getType(this.id))
         if(this.sw == 0){
             if (env.getType(this.id) == Type.INT){
-                return { value: Number(env.getValue(this.id)), type: Type.INT }
+                console.log(env.getValue(this.id))
+                return { value: env.getValue(this.id), type: Type.INT }
             }else if(env.getType(this.id) == Type.DOUBLE){
-                return { value: Number(env.getValue(this.id)), type: Type.DOUBLE }
+                return { value: env.getValue(this.id), type: Type.DOUBLE }
             }else if (env.getType(this.id) == Type.STRING){
-                let value:string = env.getValue(this.id).replaceAll("\"","")
+                let value:string = env.getValue(this.id)
                 return { value: value, type: Type.STRING }
             }else if(env.getType(this.id) == Type.CHAR){
-                let value:string = env.getValue(this.id).replaceAll("\"","")
+                let value:string = env.getValue(this.id)
                 return { value: value, type: Type.CHAR }
             }else if (env.getType(this.id) == Type.BOOLEAN) {
                 console.log("VALOR EN VARIABLE"+env.getValue(this.id))
-                if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: Boolean(true), type: Type.BOOLEAN }
-                else return { value: Boolean(false), type: Type.BOOLEAN }
+                if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: env.getValue(this.id), type: Type.BOOLEAN }
+                else return { value: env.getValue(this.id), type: Type.BOOLEAN }
             }
             else return { value: env.getValue(this.id), type: Type.error }
         }else{
@@ -45,9 +47,9 @@ export class IDE extends Expression {
                     let value = tmp[exp1.value]
                     console.log("VALOR DEL VECTOR: "+value)
                     if (env.getType(this.id) == Type.INT){
-                        return { value: Number(value), type: Type.INT }
+                        return { value: value, type: Type.INT }
                     }else if(env.getType(this.id) == Type.DOUBLE){
-                        return { value: Number(value), type: Type.DOUBLE }
+                        return { value: value, type: Type.DOUBLE }
                     }else if (env.getType(this.id) == Type.STRING){
                         value = value.replaceAll("\"","")
                         return { value: value, type: Type.STRING }
@@ -55,8 +57,8 @@ export class IDE extends Expression {
                         value = value.replaceAll("\'","")
                         return { value: value, type: Type.CHAR }
                     }else if (env.getType(this.id) == Type.BOOLEAN) {
-                        if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: Boolean(true), type: Type.BOOLEAN }
-                        else return { value: Boolean(false), type: Type.BOOLEAN }
+                        if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: true, type: Type.BOOLEAN }
+                        else return { value: false, type: Type.BOOLEAN }
                     }
                     else return { value: env.getValue(this.id), type: Type.error }
 
@@ -70,9 +72,9 @@ export class IDE extends Expression {
                     let value = tmp[exp1.value][exp2.value]
                     console.log("VALOR DEL MATRIZ: "+value)
                     if (env.getType(this.id) == Type.INT){
-                        return { value: Number(value), type: Type.INT }
+                        return { value: value, type: Type.INT }
                     }else if(env.getType(this.id) == Type.DOUBLE){
-                        return { value: Number(value), type: Type.DOUBLE }
+                        return { value: value, type: Type.DOUBLE }
                     }else if (env.getType(this.id) == Type.STRING){
                         value = value.replaceAll("\"","")
                         return { value: value, type: Type.STRING }
@@ -80,8 +82,8 @@ export class IDE extends Expression {
                         value = value.replaceAll("\'","")
                         return { value: value, type: Type.CHAR }
                     }else if (env.getType(this.id) == Type.BOOLEAN) {
-                        if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: Boolean(true), type: Type.BOOLEAN }
-                        else return { value: Boolean(false), type: Type.BOOLEAN }
+                        if (env.getValue(this.id) == "true" || env.getValue(this.id)) return { value: true, type: Type.BOOLEAN }
+                        else return { value: false, type: Type.BOOLEAN }
                     }
                     else return { value: env.getValue(this.id), type: Type.error }
                 }else{
@@ -90,5 +92,7 @@ export class IDE extends Expression {
             }
         }
         return { value: env.getValue(this.id), type: Type.error }
+    }
+    public save(env: ENV) {
     }
 }

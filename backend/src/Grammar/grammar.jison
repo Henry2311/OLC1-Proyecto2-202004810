@@ -10,10 +10,17 @@
     const {Ifsentencia} = require('../Instructions/If');
     const {Switch} = require('../Instructions/Switch');
     const {SwitchCase} = require('../Instructions/SwitchCase');
+    const {Nativas} = require('../Instructions/Nativas');
+    const {FunctionOptions} = require('../Instructions/Nativas');
 
     const {cicloWhile} = require('../Instructions/cicloWhile');
     const {cicloDo} = require('../Instructions/cicloDo');
     const {cicloFor} = require('../Instructions/cicloFor');
+
+    const {Metodo} = require('../Instructions/Method');
+    const {Functions} = require('../Instructions/Funtions');
+    const {Call} = require('../Instructions/Llamada');
+    const {RUN} = require('../Instructions/ejecutar');
 
     const {Arithmetic} = require('../Expressions/Arithmetic');
     const {ArithmeticOption} = require('../Expressions/Arithmetic');
@@ -24,8 +31,13 @@
     const {Casteo} = require('../Expressions/Casteo');
 
     const {Type} = require('../Symbol/type');
-    const {Value} = require('../Expressions/Value')
-    const {IDE} = require('../Expressions/IDE')
+    const {Value} = require('../Expressions/Value');
+    const {IDE} = require('../Expressions/IDE');
+    const {Errores} = require('../Symbol/error');
+
+    const {Singleton} = require("../Pattern/Singleton")
+
+    var s = Singleton.getInstance()
     var tmp = "";
 %}
 
@@ -330,6 +342,7 @@ boleano  "true"|"false"
 
 .   { 
         console.log("error lexico");
+        s.addError(new Errores("Lexico","Token no esperado "+yytext,yylloc.first_line,yylloc.first_column))
     }
 
 /lex
@@ -364,63 +377,66 @@ INSTRUCCION
     | IFSENTENCIA               {$$ = $1}
     | SWITCHSENTENCIA           {$$ = $1}
     | CICLOWHILE                {$$ = $1}
-    | CICLOFOR      
+    | CICLOFOR                  {$$ = $1}
     | CICLODOWHILE              {$$ = $1}
     | FUNCTION
-    | METODO
-    | LLAMADA "puntocoma"
+    | METODO                    {$$ = $1}
+    | LLAMADA "puntocoma"       {$$ = $1}
     | FUNPRINT "puntocoma"      {$$ = $1}
     | FUNPRINTLN "puntocoma"    {$$ = $1}
-    | EJECUTAR "puntocoma"
-    | 
+    | EJECUTAR "puntocoma"      {$$ = $1}
+    | error                     {console.log("Error sintactico") 
+                                var s = Singleton.getInstance()
+                                s.addError(new Errores("Sintactico","Token no esperado "+$1,@1.first_line,@1.first_column))}
+    |                           {$$ = null}
 ;
 
 EJECUTAR
-    : "run" "identificador" "parena" LISTAEXP "parenc"
-    | "run" "identificador" "parena" "parenc"
+    : "run" "identificador" "parena" LISTAEXP "parenc"  {$$ = new RUN($2,$4,@1.first_line, @1.first_column)}
+    | "run" "identificador" "parena" "parenc"           {$$ = new RUN($2,null,@1.first_line, @1.first_column)}
 ;
 
 LISTAEXP
-    : LISTAEXP "coma" EXPRESION
-    | EXPRESION
+    : LISTAEXP "coma" EXPRESION {$1.push($3); $$=$1}
+    | EXPRESION                 {$$ = [$1]}
 ;
 
 NATIVAS
-    : FUNLOWER
-    | FUNUPPER
-    | FUNROUND
-    | FUNLENGTH
-    | FUNTYPE
-    | FUNTOSTRING
-    | FUNTOCHAR
+    : FUNLOWER      {$$ = $1}
+    | FUNUPPER      {$$ = $1}
+    | FUNROUND      {$$ = $1}
+    | FUNLENGTH     {$$ = $1}
+    | FUNTYPE       {$$ = $1}
+    | FUNTOSTRING   {$$ = $1}
+    | FUNTOCHAR     {$$ = $1}
 ;
 
 FUNTOCHAR
-    : "tochararray" "parena" EXPRESION "parenc"
+    : "tochararray" "parena" EXPRESION "parenc"     {$$ = new Nativas($3,FunctionOptions.TOCHAR,@1.first_line, @1.first_column)}
 ;
 
 FUNTOSTRING
-    : "tostring" "parena" EXPRESION "parenc"
+    : "tostring" "parena" EXPRESION "parenc"        {$$ = new Nativas($3,FunctionOptions.TOSTRING,@1.first_line, @1.first_column)}
 ;
 
 FUNTYPE
-    : "typeof" "parena" EXPRESION "parenc"
+    : "typeof" "parena" EXPRESION "parenc"          {$$ = new Nativas($3,FunctionOptions.TYPEOF,@1.first_line, @1.first_column)}
 ;
 
 FUNLENGTH
-    : "length" "parena" EXPRESION "parenc"
+    : "length" "parena" EXPRESION "parenc"          {$$ = new Nativas($3,FunctionOptions.LENGTH,@1.first_line, @1.first_column)}
 ;
 
 FUNROUND
-    : "round" "parena" EXPRESION "parenc"
+    : "round" "parena" EXPRESION "parenc"           {$$ = new Nativas($3,FunctionOptions.ROUND,@1.first_line, @1.first_column)}
 ;
 
 FUNLOWER
-    : "tolower" "parena" EXPRESION "parenc"
+    : "tolower" "parena" EXPRESION "parenc"         {$$ = new Nativas($3,FunctionOptions.LOWER,@1.first_line, @1.first_column)}
 ;
 
 FUNUPPER
-    : "toupper" "parena" EXPRESION "parenc"
+    : "toupper" "parena" EXPRESION "parenc"         {$$ = new Nativas($3,FunctionOptions.UPPER,@1.first_line, @1.first_column)}
 ;
 
 FUNPRINT
@@ -432,37 +448,37 @@ FUNPRINTLN
 ;
 
 METODO
-    : "identificador" "parena" TIPO "identificador" PARAMETROS "parenc" "dospunto" "void" "llavea" INSTRUCCIONES "llavec"
-    | "identificador" "parena" "parenc" "dospunto" "void" "llavea" INSTRUCCIONES "llavec"
-    | "identificador" "parena" PARAMETROS "parenc" "llavea" INSTRUCCIONES "llavec"
-    | "identificador" "parena" "parenc" "llavea" INSTRUCCIONES "llavec"
+    : "identificador" "parena" PARAMETROS "parenc" "dospunto" "void" "llavea" INSTRUCCIONES "llavec" {$$ = new Metodo($1,Type.VOID,$8,$3,@1.first_line, @1.first_column)}
+    | "identificador" "parena" "parenc" "dospunto" "void" "llavea" INSTRUCCIONES "llavec"            {$$ = new Metodo($1,Type.VOID,$7,null,@1.first_line, @1.first_column)}
+    | "identificador" "parena" PARAMETROS "parenc" "llavea" INSTRUCCIONES "llavec"                   {$$ = new Metodo($1,Type.VOID,$6,$3,@1.first_line, @1.first_column)}
+    | "identificador" "parena" "parenc" "llavea" INSTRUCCIONES "llavec"                              {$$ = new Metodo($1,Type.VOID,$5,null,@1.first_line, @1.first_column)}
 ;
 
 FUNCTION
-    : "identificador" "parena" TIPO "identificador" PARAMETROS "parenc" "dospunto" TIPO "llavea" INSTRUCCIONES "return" EXPRESION "llavec"
+    : "identificador" "parena" PARAMETROS "parenc" "dospunto" TIPO "llavea" INSTRUCCIONES "return" EXPRESION puntocoma "llavec" {$$ = new Functions($1,$6,$8,$3,$10,@1.first_line, @1.first_column)}
 ;
 
 PARAMETROS
-    : "coma" TIPO "identificador" PARAMETROS
-    | "coma" TIPO "identificador"
+    : PARAMETROS "coma" DECLARACION     {$1.push($3); $$ = $1;}
+    | DECLARACION                       {$$ = [$1]} 
 ;
 
 LLAMADA
-    : "identificador" "parena" "identificador" LLAMADAP "parenc"   
-    | "identificador" "parena" "parenc" 
+    : "identificador" "parena" LLAMADAP "parenc"    {$$ = new Call($1,$3,@1.first_line, @1.first_column)}
+    | "identificador" "parena" "parenc"             {$$ = new Call($1,null,@1.first_line, @1.first_column)}
 ;
 
 LLAMADAP
-    : "coma" "identificador" LLAMADAP
-    | "coma" "identificador"
+    : LLAMADAP "coma" EXPRESION   {$1.push($3); $$=$1}
+    | EXPRESION                  {$$ = [$1]}
 ;
 
 CICLODOWHILE
-    : "do" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" "while" "parena" EXPRESION "parenc"    {$$ = new cicloDo($8,$3,@1.first_line, @1.first_column)}
+    : "do" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" "while" "parena" EXPRESION "parenc"    {$$ = new cicloDo($8,$3,$4,@1.first_line, @1.first_column)}
 ;
 
 CICLOFOR
-    : "for" "parena" INICIOFOR "puntocoma" EXPRESION "puntocoma" ACTUALIZACION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"   {$$ = new cicloFor($3,$5,$7,$10,@1.first_line, @1.first_column)}
+    : "for" "parena" INICIOFOR "puntocoma" EXPRESION "puntocoma" ACTUALIZACION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"   {$$ = new cicloFor($3,$5,$7,$10,$11,@1.first_line, @1.first_column)}
 ;
 
 ACTUALIZACION
@@ -476,7 +492,7 @@ INICIOFOR
 ;
 
 CICLOWHILE
-    : "while" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"     {$$ = new cicloWhile($3,$6,@1.first_line, @1.first_column)}
+    : "while" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"     {$$ = new cicloWhile($3,$6,$7,@1.first_line, @1.first_column)}
 ;
 
 SWITCHSENTENCIA
@@ -495,21 +511,21 @@ CASEDEF
 ;
 
 TRANSFERENCIA
-    : "break" "puntocoma"
-    | "continue" "puntocoma"
+    : "break" "puntocoma"           {$$=Type.BREAK}
+    | "continue" "puntocoma"        {$$=Type.CONTINUE}
     | "return" EXPRESION "puntocoma"
     | "return" "puntocoma"
-    | 
+    |                               {$$ = null}
 ;
 
 IFSENTENCIA
-    : "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"                       {$$ = new Ifsentencia($3,$6,null,@1.first_line, @1.first_column)}   
-    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" ELSESENTENCIA         {$$ = new Ifsentencia($3,$6,$9,@1.first_line, @1.first_column)}
-    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" else IFSENTENCIA      {$$ = new Ifsentencia($3,$6,$10,@1.first_line, @1.first_column)}
+    : "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"                       {$$ = new Ifsentencia($3,$6,null,$7,@1.first_line, @1.first_column)}   
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" ELSESENTENCIA         {$$ = new Ifsentencia($3,$6,$9,$7,@1.first_line, @1.first_column)}
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" else IFSENTENCIA      {$$ = new Ifsentencia($3,$6,$10,$7,@1.first_line, @1.first_column)}
 ;
 
 ELSESENTENCIA
-    : "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"  {$$ = new Ifsentencia(null,$3,null,@1.first_line, @1.first_column)}
+    : "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"  {$$ = new Ifsentencia(null,$3,null,$4,@1.first_line, @1.first_column)}
 ;
 
 MODIFICACIONV
@@ -554,11 +570,11 @@ DECLARACION
     | TIPO "identificador" "igual" EXPRESION {$$= new Declaracion($2,$1,$4, @1.first_line, @1.first_column)}
     | TIPO  LISTAID                          {$$= new Declaracion($2,$1,null, @1.first_line, @1.first_column)}
     | TIPO  LISTAID "igual" EXPRESION        {$$= new Declaracion($2,$1,$4, @1.first_line, @1.first_column)}
-    | TIPO "identificador" "corchetea" "corchetec" "igual" "new" TIPO "corchetea" EXPRESION "corchetec"  {$$= new DeclaracionV($2,$1,$9,null,null,0, @1.first_line, @1.first_column)}
-    | TIPO "identificador" "corchetea" "corchetec" "corchetea" "corchetec" "igual" "new" TIPO "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec" {$$= new DeclaracionV($2,$1,$11,$14,null,0, @1.first_line, @1.first_column)}
-    | TIPO "identificador" "corchetea" "corchetec" "igual" "corchetea" LISTAVALORESV "corchetec" {$$= new DeclaracionV($2,$1,null,null,$7,0,@1.first_line, @1.first_column)}
-    | TIPO "identificador" "corchetea" "corchetec" "corchetea" "corchetec" "igual" "corchetea" LISTAVALORESM "corchetec" {$$= new DeclaracionV($2,$1,null,null,$9,1,@1.first_line, @1.first_column)}
-    | TIPO "identificador" "corchetea" "corchetec" "igual" FUNTOCHAR
+    | TIPO "identificador" "corchetea" "corchetec" "igual" "new" TIPO "corchetea" EXPRESION "corchetec"  {$$= new DeclaracionV($2,$1,$9,null,null,null,0, @1.first_line, @1.first_column)}
+    | TIPO "identificador" "corchetea" "corchetec" "corchetea" "corchetec" "igual" "new" TIPO "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec" {$$= new DeclaracionV($2,$1,$11,$14,null,null,0, @1.first_line, @1.first_column)}
+    | TIPO "identificador" "corchetea" "corchetec" "igual" "corchetea" LISTAVALORESV "corchetec" {$$= new DeclaracionV($2,$1,null,null,$7,null,0,@1.first_line, @1.first_column)}
+    | TIPO "identificador" "corchetea" "corchetec" "corchetea" "corchetec" "igual" "corchetea" LISTAVALORESM "corchetec" {$$= new DeclaracionV($2,$1,null,null,$9,null,1,@1.first_line, @1.first_column)}
+    | TIPO "identificador" "corchetea" "corchetec" "igual" FUNTOCHAR    {$$= new DeclaracionV($2,$1,null,null,null,$6,2,@1.first_line, @1.first_column)}
 ;
 
 LISTAID
@@ -588,8 +604,8 @@ EXPRESION
     |  ACCESOV                          {$$ = $1}
     |  CASTEO                           {$$ = $1}
     |  TERNARY                          {$$ = $1}
-    |  LLAMADA
-    |  NATIVAS
+    |  LLAMADA                          {$$ = $1}
+    |  NATIVAS                          {$$ = $1}
     |  VALOR                            {$$ = $1}
 ;
 

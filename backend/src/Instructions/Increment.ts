@@ -31,4 +31,6 @@ export class Increment extends Instruction {
       }
       return { value: 0, type: Type.error }
     }
+    public save(env: ENV) {
+    }
   }

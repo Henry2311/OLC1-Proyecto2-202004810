@@ -32,10 +32,11 @@ var Switch = /** @class */ (function (_super) {
         var brk;
         if (this.cases != null) {
             var newEnv = new Env_1.ENV(env);
-            newEnv.saveVar("__compare__", exp.value, exp.type);
+            newEnv.saveVar("__compare__", exp.value, exp.type, null, null);
             for (var _i = 0, _a = this.cases; _i < _a.length; _i++) {
                 var csc = _a[_i];
-                brk = csc.run(newEnv);
+                if (csc != null)
+                    brk = csc.run(newEnv);
                 if (brk == 1)
                     break;
             }
@@ -44,10 +45,12 @@ var Switch = /** @class */ (function (_super) {
             var newEnv = new Env_1.ENV(env);
             for (var _b = 0, _c = this.def; _b < _c.length; _b++) {
                 var ins = _c[_b];
-                ins.run(newEnv);
+                if (ins != null)
+                    ins.run(newEnv);
             }
         }
     };
+    Switch.prototype.save = function (env) { };
     return Switch;
 }(Instruction_1.Instruction));
 exports.Switch = Switch;

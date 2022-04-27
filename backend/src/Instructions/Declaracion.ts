@@ -23,7 +23,7 @@ export class Declaracion extends Instruction {
         for(const names of id_list){
             if(exp != null){
                 if(exp.type == this.type){
-                    const aux = env.saveVar(names,exp.value,this.type)
+                    const aux = env.saveVar(names,exp.value,this.type,null,null)
                     if (aux){
                         console.log("variable ["+names+"] ingresada...");
                     }else{
@@ -35,15 +35,15 @@ export class Declaracion extends Instruction {
             }else{
                 let aux;
                 if(this.type == Type.INT){
-                    aux = env.saveVar(names,0,this.type)
+                    aux = env.saveVar(names,0,this.type,null,null)
                 }else if(this.type == Type.DOUBLE){
-                    aux = env.saveVar(names,0.0,this.type)
+                    aux = env.saveVar(names,0.0,this.type,null,null)
                 }else if(this.type == Type.STRING){
-                    aux = env.saveVar(names,"",this.type)
+                    aux = env.saveVar(names,"",this.type,null,null)
                 }else if(this.type == Type.CHAR){
-                    aux = env.saveVar(names,'',this.type)
+                    aux = env.saveVar(names,'',this.type,null,null)
                 }else if(this.type == Type.BOOLEAN){
-                    aux = env.saveVar(names,true,this.type)
+                    aux = env.saveVar(names,true,this.type,null,null)
                 }
                 if (aux){
                     console.log("variable ["+names+"] ingresada...");
@@ -53,5 +53,7 @@ export class Declaracion extends Instruction {
             }
         }
 
+    }
+    public save(env: ENV) {
     }
   }

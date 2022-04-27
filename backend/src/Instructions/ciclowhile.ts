@@ -1,12 +1,14 @@
 import { Expression } from "../Abstract/Expression";
 import { Instruction } from "../Abstract/Instruction";
 import { ENV } from "../Symbol/Env";
+import { Type } from "../Symbol/type";
 
 export class cicloWhile extends Instruction{
 
     constructor(
         public logic: Expression,
         public instruction: Array<Instruction>|null,
+        public transfer: Type|null,
         line: number,
         column: number
     ) {
@@ -16,14 +18,31 @@ export class cicloWhile extends Instruction{
     public run(env: ENV) {
         let logica = this.logic.run(env)
         const newEnv = new ENV(env);
-
+        let aux;
         while(logica.value){
             if(this.instruction!=null)
                 for(const inst of this.instruction){
-                    inst.run(newEnv)
+                    let t
+                    if(inst!=null)t = inst.run(newEnv)
+                    if(t == Type.BREAK){
+                        aux = Type.BREAK
+                        break
+                    }else if(t == Type.CONTINUE){
+                        aux = Type.CONTINUE
+                        continue
+                    }
                 }
             logica = this.logic.run(env)
+            if(this.transfer != null || aux!=null){
+                if(this.transfer == Type.BREAK || aux == Type.BREAK){
+                    break
+                }else if(this.transfer == Type.CONTINUE || aux == Type.CONTINUE){
+                    continue
+                }
+            }
         }
+    }
+    public save(env: ENV) {
     }
     
 }

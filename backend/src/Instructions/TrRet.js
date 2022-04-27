@@ -15,29 +15,21 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.Ternary = void 0;
+exports.TrRet = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
-var Ternary = /** @class */ (function (_super) {
-    __extends(Ternary, _super);
-    function Ternary(logic, caseT, caseF, line, column) {
+var TrRet = /** @class */ (function (_super) {
+    __extends(TrRet, _super);
+    function TrRet(expresion, line, column) {
         var _this = _super.call(this, line, column) || this;
-        _this.logic = logic;
-        _this.caseT = caseT;
-        _this.caseF = caseF;
+        _this.expresion = expresion;
         return _this;
     }
-    Ternary.prototype.run = function (env) {
-        var expLogic = this.logic.run(env);
-        var expTrue = this.caseT.run(env);
-        var expFalse = this.caseF.run(env);
-        if (expLogic.value) {
-            return { value: expTrue.value, type: expTrue.type };
-        }
-        else {
-            return { value: expFalse.value, type: expFalse.type };
-        }
+    TrRet.prototype.run = function (env) {
+        var exp = this.expresion.run(env);
+        return { value: exp.value, type: exp.type };
     };
-    Ternary.prototype.save = function (env) { };
-    return Ternary;
+    TrRet.prototype.save = function (env) {
+    };
+    return TrRet;
 }(Instruction_1.Instruction));
-exports.Ternary = Ternary;
+exports.TrRet = TrRet;

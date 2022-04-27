@@ -4,7 +4,7 @@ import { ENV } from "../Symbol/Env";
 import { Type } from "../Symbol/type";
 
 export class Arithmetic extends Expression{
-
+    
     constructor(
         private left: Expression|null,
         private right: Expression,
@@ -168,6 +168,9 @@ export class Arithmetic extends Expression{
         }
         
         return { value: null, type: Type.error }
+    }
+
+    public save(env: ENV) {
     }
 }
 
