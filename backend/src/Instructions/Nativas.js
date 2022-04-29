@@ -17,6 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.FunctionOptions = exports.Nativas = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var type_1 = require("../Symbol/type");
 var Nativas = /** @class */ (function (_super) {
     __extends(Nativas, _super);
@@ -28,29 +30,36 @@ var Nativas = /** @class */ (function (_super) {
     }
     Nativas.prototype.run = function (env) {
         var exp = this.valor.run(env);
-        console.log("TIPO DE FUNCION: " + this.type);
+        var s = Singleton_1.Singleton.getInstance();
         if (this.type == FunctionOptions.LOWER) {
             if (exp.type == type_1.Type.STRING) {
                 return { value: exp.value.toLowerCase(), type: type_1.Type.STRING };
+            }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible debe ser STRING", this.line, this.column));
             }
         }
         else if (this.type == FunctionOptions.UPPER) {
             if (exp.type == type_1.Type.STRING) {
                 return { value: exp.value.toUpperCase(), type: type_1.Type.STRING };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible debe ser STRING", this.line, this.column));
+            }
         }
         else if (this.type == FunctionOptions.ROUND) {
             if (exp.type == type_1.Type.DOUBLE) {
                 return { value: Math.round(exp.value), type: type_1.Type.DOUBLE };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible debe ser DOUBLE", this.line, this.column));
+            }
         }
         else if (this.type == FunctionOptions.LENGTH) {
-            console.log("SE SUPONE ESTO ES UN ARRAY: " + exp.value);
             var arr = Array.from(exp.value);
             return { value: arr.length, type: type_1.Type.INT };
         }
         else if (this.type == FunctionOptions.TYPEOF) {
-            console.log(exp.type + " " + exp.value);
             if (exp.type == type_1.Type.INT) {
                 return { value: "int", type: type_1.Type.STRING };
             }
@@ -66,20 +75,70 @@ var Nativas = /** @class */ (function (_super) {
             else if (exp.type == type_1.Type.STRING) {
                 return { value: "string", type: type_1.Type.STRING };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible", this.line, this.column));
+            }
         }
         else if (this.type == FunctionOptions.TOSTRING) {
             return { value: exp.value.toString(), type: type_1.Type.STRING };
         }
         else if (this.type == FunctionOptions.TOCHAR) {
-            console.log("TOCHARARRAY " + exp.value + ", " + exp.type);
             if (exp.type == type_1.Type.STRING) {
                 var valor = exp.value.split('');
                 return { value: valor, type: type_1.Type.CHAR };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible debe ser STRING", this.line, this.column));
+            }
         }
         return { value: null, type: type_1.Type.error };
     };
-    Nativas.prototype.save = function (env) {
+    Nativas.prototype.save = function (env) { };
+    Nativas.prototype.ast = function () {
+        var arb = "nodo" + this.line + this.column + ";\n";
+        arb += "nodo" + this.line + this.column + "[label =\"Instruccion\"];\n";
+        if (this.type == FunctionOptions.LOWER) {
+            arb += "nodo1" + this.line + this.column + "[label =\"toLower()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
+        else if (this.type == FunctionOptions.UPPER) {
+            arb += "nodo1" + this.line + this.column + "[label =\"toUpper()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
+        else if (this.type == FunctionOptions.ROUND) {
+            arb += "nodo1" + this.line + this.column + "[label =\"round()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
+        else if (this.type == FunctionOptions.LENGTH) {
+            arb += "nodo1" + this.line + this.column + "[label =\"length()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
+        else if (this.type == FunctionOptions.TYPEOF) {
+            arb += "nodo1" + this.line + this.column + "[label =\"typeof()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
+        else if (this.type == FunctionOptions.TOSTRING) {
+            arb += "nodo1" + this.line + this.column + "[label =\"toString()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
+        else if (this.type == FunctionOptions.TOCHAR) {
+            arb += "nodo1" + this.line + this.column + "[label =\"toCharArray()\"];\n";
+            arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+            arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2) + "\n";
+            return arb;
+        }
     };
     return Nativas;
 }(Instruction_1.Instruction));

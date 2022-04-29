@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.Switch = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
 var Env_1 = require("../Symbol/Env");
 var Switch = /** @class */ (function (_super) {
     __extends(Switch, _super);
@@ -51,6 +52,35 @@ var Switch = /** @class */ (function (_super) {
         }
     };
     Switch.prototype.save = function (env) { };
+    Switch.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + ";\n"; //switch expresion cases def
+        arb += "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Switch\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"Lista Cases\"];\n";
+        arb += "nodo3" + this.line + this.column + "[label = \"Parametro\"];\n";
+        arb += "nodo4" + this.line + this.column + "[label = \"Default\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo3" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo4" + this.line + this.column + ";\n";
+        arb += "nodo3" + this.line + this.column + " -> " + this.expresion.ast(this.line + 2, this.column + 2) + "\n";
+        for (var _i = 0, _a = this.cases; _i < _a.length; _i++) {
+            var csc = _a[_i];
+            if (csc != null) {
+                csc.ast();
+                s.addAST("nodo2".concat(this.line).concat(this.column, " -> nodo").concat(csc.line).concat(csc.column, ";\n"));
+            }
+        }
+        for (var _b = 0, _c = this.def; _b < _c.length; _b++) {
+            var ins = _c[_b];
+            if (ins != null) {
+                ins.ast();
+                s.addAST("nodo4".concat(this.line).concat(this.column, " -> nodo").concat(ins.line).concat(ins.column, ";\n"));
+            }
+        }
+        s.addAST(arb);
+    };
     return Switch;
 }(Instruction_1.Instruction));
 exports.Switch = Switch;

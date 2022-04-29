@@ -6,7 +6,9 @@ export abstract class Funcion {
       this.column = column;
     }
   
-    public abstract run(env: ENV): any;
+    public abstract run(env:ENV):any;
 
     public abstract save(env:ENV):any;
+
+    public abstract ast():void
   }

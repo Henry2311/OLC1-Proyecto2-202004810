@@ -17,6 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.AsignacionV = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var type_1 = require("../Symbol/type");
 var AsignacionV = /** @class */ (function (_super) {
     __extends(AsignacionV, _super);
@@ -33,6 +35,7 @@ var AsignacionV = /** @class */ (function (_super) {
         var indice1 = this.x.run(env);
         var indice2 = (_a = this.y) === null || _a === void 0 ? void 0 : _a.run(env);
         var exp = this.valor.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         if (env.search(this.nombre)) {
             if (indice2 == null) {
                 var arr = env.getValue(this.nombre);
@@ -40,8 +43,13 @@ var AsignacionV = /** @class */ (function (_super) {
                     if (exp.type == env.getType(this.nombre)) {
                         arr[indice1.value] = exp.value;
                         env.setVar(this.nombre, arr);
-                        console.log("vector [" + this.nombre + "] actualizado con exito...");
                     }
+                    else {
+                        s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible, no se puede asignar el valor a " + this.nombre, this.line, this.column));
+                    }
+                }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible para el indice del vector", this.line, this.column));
                 }
             }
             else {
@@ -50,13 +58,35 @@ var AsignacionV = /** @class */ (function (_super) {
                     if (exp.type == env.getType(this.nombre)) {
                         arr[indice1.value][indice2.value] = exp.value;
                         env.setVar(this.nombre, arr);
-                        console.log("Matriz [" + this.nombre + "] actualizado con exito...");
                     }
+                    else {
+                        s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible, no se puede asignar el valor a " + this.nombre, this.line, this.column));
+                    }
+                }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible para el indice del vector", this.line, this.column));
                 }
             }
         }
+        else {
+            s.addError(new error_1.Errores("Semantico", "El vector no ha sido creada", this.line, this.column));
+        }
     };
-    AsignacionV.prototype.save = function (env) {
+    AsignacionV.prototype.save = function (env) { };
+    AsignacionV.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Asignacion\"];\n";
+        if (this.x != null && this.y == null) {
+            arb += "nodo2" + this.line + this.column + "[label = \"" + this.nombre + "[]\"];\n";
+        }
+        else if (this.x != null && this.y != null) {
+            arb += "nodo2" + this.line + this.column + "[label = \"" + this.nombre + "[][]\"];\n";
+        }
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> " + this.valor.ast(this.line + 2, this.column + 2);
+        s.addAST(arb);
     };
     return AsignacionV;
 }(Instruction_1.Instruction));

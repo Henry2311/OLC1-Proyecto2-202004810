@@ -4,8 +4,8 @@ import { Symbol } from "./Symbol";
 import { Type } from "./type";
 
 export class ENV{
-    private tablaSimbolos: Map<string, Symbol>; //unicamente para variables, tienes q guardar funciones en otro map 
-    
+    private tablaSimbolos: Map<string, Symbol>; 
+
     constructor(public anterior: ENV | null) {
         this.tablaSimbolos = new Map();
     }
@@ -15,14 +15,12 @@ export class ENV{
     }
     
     public saveVar(nombre: string, valor: any, type: Type,ins:Array<Instruction>|null,param:Array<Declaracion>|null): boolean {
-    
         if(!this.search(nombre)){
           this.tablaSimbolos.set(nombre, new Symbol(valor, nombre, type,ins,param));
           return true
         }
-        console.log("esta variable ["+nombre+"] ya existe...");
         return false
-      }
+    }
     
     public search(nombre: string): boolean {
         let env: ENV | null = this;
@@ -83,8 +81,6 @@ export class ENV{
                 if (entry[0] == nombre) {
                     if( entry[1].value == null){
                         return entry[1]
-                    }else{
-                        console.log("No es una funcion")    
                     }
                 }
             }

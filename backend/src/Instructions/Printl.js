@@ -28,10 +28,17 @@ var Println = /** @class */ (function (_super) {
     Println.prototype.run = function (env) {
         var s = Singleton_1.Singleton.getInstance();
         var exp = this.expresion.run(env);
-        console.log(">>", exp.value);
         s.addConsola(exp.value + "\n");
     };
     Println.prototype.save = function (env) { };
+    Println.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Println\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> " + this.expresion.ast(this.line + 2, this.column + 2);
+        s.addAST(arb);
+    };
     return Println;
 }(Instruction_1.Instruction));
 exports.Println = Println;

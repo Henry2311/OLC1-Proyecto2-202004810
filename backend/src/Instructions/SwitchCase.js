@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.SwitchCase = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
 var Env_1 = require("../Symbol/Env");
 var SwitchCase = /** @class */ (function (_super) {
     __extends(SwitchCase, _super);
@@ -60,6 +61,24 @@ var SwitchCase = /** @class */ (function (_super) {
         return 0;
     };
     SwitchCase.prototype.save = function (env) { };
+    SwitchCase.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + ";\n"; //switch expresion cases def
+        arb += "nodo" + this.line + this.column + "[label = \"Case\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Lista Instrucciones\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"Parametro\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo2" + this.line + this.column + " -> " + this.expression.ast(this.line + 2, this.column + 2) + "\n";
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var ins = _a[_i];
+            if (ins != null) {
+                ins.ast();
+                s.addAST("nodo1".concat(this.line).concat(this.column, " -> nodo").concat(ins.line).concat(ins.column, ";\n"));
+            }
+        }
+        s.addAST(arb);
+    };
     return SwitchCase;
 }(Instruction_1.Instruction));
 exports.SwitchCase = SwitchCase;

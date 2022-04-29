@@ -15,9 +15,19 @@ export class Print extends Instruction {
     public run(env: ENV) {
       var s = Singleton.getInstance()
       let exp= this.expresion.run(env)
-      console.log(">>",exp.value);
       s.addConsola(exp.value+"")
       
     }
     public save(env:ENV){}
+
+    public ast(){
+      var s = Singleton.getInstance()
+      let arb = "nodo"+this.line+this.column+"[label = \"Instruccion\"];\n"
+      arb+="nodo1"+this.line+this.column+"[label = \"Println\"];\n"
+
+      arb+="nodo"+this.line+this.column+" -> nodo1"+this.line+this.column+";\n"
+      arb+="nodo1"+this.line+this.column+" -> "+this.expresion.ast(this.line+2,this.column+2)
+
+      s.addAST(arb)
+    }
   }

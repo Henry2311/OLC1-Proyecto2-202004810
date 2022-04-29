@@ -17,6 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.Casteo = void 0;
 var Expression_1 = require("../Abstract/Expression");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var type_1 = require("../Symbol/type");
 var Casteo = /** @class */ (function (_super) {
     __extends(Casteo, _super);
@@ -29,6 +31,7 @@ var Casteo = /** @class */ (function (_super) {
     Casteo.prototype.run = function (env) {
         var exp = this.expression.run(env);
         var value;
+        var s = Singleton_1.Singleton.getInstance();
         if (this.type == type_1.Type.DOUBLE && exp.type == type_1.Type.INT) {
             value = Number.parseFloat(exp.value).toFixed(1);
             return { value: value, type: type_1.Type.DOUBLE };
@@ -58,11 +61,36 @@ var Casteo = /** @class */ (function (_super) {
             return { value: value, type: type_1.Type.BOOLEAN };
         }
         else {
-            console.log("Incompatibilidad de Tipo de Dato");
+            s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
         }
         return { value: null, type: type_1.Type.error };
     };
     Casteo.prototype.save = function (env) {
+    };
+    Casteo.prototype.ast = function () {
+        var arb = "nodo" + this.line + this.column + ";\n";
+        arb += "nodo" + this.line + this.column + "[label =\"(" + this.getTipo(this.type) + ")\"];\n";
+        arb += "nodo" + this.line + this.column + " -> " + this.expression.ast(this.line + 4, this.column + 4) + "\n";
+        return arb;
+    };
+    Casteo.prototype.getTipo = function (t) {
+        var op = "";
+        if (t == type_1.Type.INT) {
+            op = "int";
+        }
+        else if (t == type_1.Type.DOUBLE) {
+            op = "double";
+        }
+        else if (t == type_1.Type.STRING) {
+            op = "string";
+        }
+        else if (t == type_1.Type.BOOLEAN) {
+            op = "boolean";
+        }
+        else if (t == type_1.Type.CHAR) {
+            op = "char";
+        }
+        return op;
     };
     return Casteo;
 }(Expression_1.Expression));

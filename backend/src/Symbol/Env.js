@@ -16,7 +16,6 @@ var ENV = /** @class */ (function () {
             this.tablaSimbolos.set(nombre, new Symbol_1.Symbol(valor, nombre, type, ins, param));
             return true;
         }
-        console.log("esta variable [" + nombre + "] ya existe...");
         return false;
     };
     ENV.prototype.search = function (nombre) {
@@ -78,9 +77,6 @@ var ENV = /** @class */ (function () {
                 if (entry[0] == nombre) {
                     if (entry[1].value == null) {
                         return entry[1];
-                    }
-                    else {
-                        console.log("No es una funcion");
                     }
                 }
             }

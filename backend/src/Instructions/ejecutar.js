@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.RUN = void 0;
 var Function_1 = require("../Abstract/Function");
+var Singleton_1 = require("../Pattern/Singleton");
 var RUN = /** @class */ (function (_super) {
     __extends(RUN, _super);
     function RUN(id, params, line, column) {
@@ -63,6 +64,28 @@ var RUN = /** @class */ (function (_super) {
     };
     RUN.prototype.save = function (env) {
         return true;
+    };
+    RUN.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + ";\n"; //switch expresion cases def
+        arb += "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"RUN\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"" + this.id + "\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        if (this.params != null) {
+            arb += "nodo3" + this.line + this.column + "[label = \"Parametros\"];\n";
+            arb += "nodo1" + this.line + this.column + " -> nodo3" + this.line + this.column + ";\n";
+            var f = 2;
+            for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+                var p = _a[_i];
+                if (p != null) {
+                    arb += "nodo3" + this.line + this.column + " -> " + p.ast(this.line + f, this.column + f) + "\n";
+                    f += 2;
+                }
+            }
+        }
+        s.addAST(arb);
     };
     return RUN;
 }(Function_1.Funcion));

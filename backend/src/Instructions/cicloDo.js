@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.cicloDo = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
 var Env_1 = require("../Symbol/Env");
 var type_1 = require("../Symbol/type");
 var cicloDo = /** @class */ (function (_super) {
@@ -59,7 +60,29 @@ var cicloDo = /** @class */ (function (_super) {
             }
         } while (logica.value);
     };
-    cicloDo.prototype.save = function (env) {
+    cicloDo.prototype.save = function (env) { };
+    cicloDo.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Ciclo Do\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"Do\"];\n"; //DO instrucciones while validacion
+        arb += "nodo3" + this.line + this.column + "[label = \"Lista Instrucciones\"];\n";
+        arb += "nodo4" + this.line + this.column + "[label = \"while\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo3" + this.line + this.column + ";\n";
+        if (this.instruction != null) {
+            for (var _i = 0, _a = this.instruction; _i < _a.length; _i++) {
+                var inst = _a[_i];
+                if (inst != null) {
+                    inst.ast();
+                    s.addAST("nodo3".concat(this.line).concat(this.column, " -> nodo").concat(inst.line).concat(inst.column, ";\n"));
+                }
+            }
+        }
+        arb += "nodo1" + this.line + this.column + " -> nodo4" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> " + this.logic.ast(this.line + 2, this.column + 2) + "\n";
+        s.addAST(arb);
     };
     return cicloDo;
 }(Instruction_1.Instruction));

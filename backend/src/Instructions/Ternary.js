@@ -38,6 +38,24 @@ var Ternary = /** @class */ (function (_super) {
         }
     };
     Ternary.prototype.save = function (env) { };
+    Ternary.prototype.ast = function () {
+        var arb = "nodo" + this.line + this.column + ";\n";
+        arb += "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n"; //Logica ? true : false
+        arb += "nodo1" + this.line + this.column + "[label = \"Op Ternario\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"Validacion\"];\n";
+        arb += "nodo3" + this.line + this.column + "[label = \"?\"];\n";
+        arb += "nodo4" + this.line + this.column + "[label = \"true\"];\n";
+        arb += "nodo5" + this.line + this.column + "[label = \"false\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo3" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo4" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo5" + this.line + this.column + ";\n";
+        arb += "nodo2" + this.line + this.column + " -> " + this.logic.ast(this.line + 2, this.column + 2) + "\n";
+        arb += "nodo4" + this.line + this.column + " -> " + this.caseT.ast(this.line + 2, this.column + 2) + "\n";
+        arb += "nodo5" + this.line + this.column + " -> " + this.caseF.ast(this.line + 2, this.column + 2) + "\n";
+        return arb;
+    };
     return Ternary;
 }(Instruction_1.Instruction));
 exports.Ternary = Ternary;

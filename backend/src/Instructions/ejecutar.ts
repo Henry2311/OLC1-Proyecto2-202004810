@@ -1,5 +1,6 @@
 import { Expression } from "../Abstract/Expression";
 import { Funcion } from "../Abstract/Function";
+import { Singleton } from "../Pattern/Singleton";
 import { ENV } from "../Symbol/Env";
 
 export class RUN extends Funcion{
@@ -45,5 +46,32 @@ export class RUN extends Funcion{
 
     public save(env:ENV){
         return true;
+    }
+
+    public ast(){
+        var s = Singleton.getInstance()
+        let arb:string = "nodo"+this.line+this.column+";\n"     //switch expresion cases def
+        arb+= "nodo"+this.line+this.column+"[label = \"Instruccion\"];\n"
+        arb+="nodo1"+this.line+this.column+"[label = \"RUN\"];\n"
+        arb+="nodo2"+this.line+this.column+"[label = \""+this.id+"\"];\n"
+        
+
+        arb+="nodo"+this.line+this.column+" -> nodo1"+this.line+this.column+";\n"
+        arb+="nodo1"+this.line+this.column+" -> nodo2"+this.line+this.column+";\n"
+        
+
+        if(this.params!=null){
+            arb+="nodo3"+this.line+this.column+"[label = \"Parametros\"];\n"
+            arb+="nodo1"+this.line+this.column+" -> nodo3"+this.line+this.column+";\n"
+            let f = 2;
+            for(const p of this.params){
+                if(p!=null){
+                    arb+="nodo3"+this.line+this.column+" -> "+p.ast(this.line+f,this.column+f)+"\n"
+                    f+=2
+                }
+            }
+        }
+
+        s.addAST(arb)
     }
 }

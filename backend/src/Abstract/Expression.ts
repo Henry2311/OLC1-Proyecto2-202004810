@@ -8,7 +8,9 @@ export abstract class Expression {
         this.column = column + 1
     }
 
-    public abstract run(env: ENV): Return
+    public abstract run(env:ENV):Return
     
-    public abstract save(env:ENV):any;
+    public abstract save(env:ENV):any
+
+    public abstract ast(line:number,column:number):string
 }

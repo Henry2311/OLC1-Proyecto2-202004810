@@ -27,7 +27,6 @@ var Value = /** @class */ (function (_super) {
         return _this;
     }
     Value.prototype.run = function () {
-        console.log("valor: " + this.value);
         if (this.type == type_1.Type.INT) {
             return { value: Number(this.value), type: type_1.Type.INT };
         }
@@ -39,7 +38,6 @@ var Value = /** @class */ (function (_super) {
             return { value: this.value, type: type_1.Type.STRING };
         }
         else if (this.type == type_1.Type.CHAR) {
-            console.log("caracter " + this.value);
             this.value = (this.value).replaceAll("\'", "");
             return { value: this.value, type: type_1.Type.CHAR };
         }
@@ -52,7 +50,11 @@ var Value = /** @class */ (function (_super) {
         else
             return { value: this.value, type: type_1.Type.error };
     };
-    Value.prototype.save = function (env) {
+    Value.prototype.save = function (env) { };
+    Value.prototype.ast = function (n1, n2) {
+        var arb = "nodo" + this.line + n1 + this.column + n2 + ";\n";
+        arb += "nodo" + this.line + n1 + this.column + n2 + "[label =\"" + this.value + "\"];\n";
+        return arb;
     };
     return Value;
 }(Expression_1.Expression));

@@ -19,4 +19,8 @@ export class TrRet extends Instruction{
     public save(env: ENV) {
 
     }
+
+    public ast(){
+        
+    }
 }

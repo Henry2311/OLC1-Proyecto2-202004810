@@ -7,5 +7,8 @@ export abstract class Instruction {
     }
   
     public abstract run(env: ENV): any;
+
     public abstract save(env:ENV):any;
+  
+    public abstract ast():void;
   }

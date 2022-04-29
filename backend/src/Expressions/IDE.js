@@ -17,7 +17,10 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.IDE = void 0;
 var Expression_1 = require("../Abstract/Expression");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var type_1 = require("../Symbol/type");
+var valor;
 var IDE = /** @class */ (function (_super) {
     __extends(IDE, _super);
     function IDE(id, sw, expression1, expression2, line, column) {
@@ -30,10 +33,10 @@ var IDE = /** @class */ (function (_super) {
     }
     IDE.prototype.run = function (env) {
         var _a, _b;
-        console.log(this.id + " TIPO: " + env.getType(this.id));
+        var s = Singleton_1.Singleton.getInstance();
         if (this.sw == 0) {
+            valor = env.getValue(this.id);
             if (env.getType(this.id) == type_1.Type.INT) {
-                console.log(env.getValue(this.id));
                 return { value: env.getValue(this.id), type: type_1.Type.INT };
             }
             else if (env.getType(this.id) == type_1.Type.DOUBLE) {
@@ -48,14 +51,15 @@ var IDE = /** @class */ (function (_super) {
                 return { value: value, type: type_1.Type.CHAR };
             }
             else if (env.getType(this.id) == type_1.Type.BOOLEAN) {
-                console.log("VALOR EN VARIABLE" + env.getValue(this.id));
                 if (env.getValue(this.id) == "true" || env.getValue(this.id))
                     return { value: env.getValue(this.id), type: type_1.Type.BOOLEAN };
                 else
                     return { value: env.getValue(this.id), type: type_1.Type.BOOLEAN };
             }
-            else
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato inexistente", this.line, this.column));
                 return { value: env.getValue(this.id), type: type_1.Type.error };
+            }
         }
         else {
             var exp1 = (_a = this.expression1) === null || _a === void 0 ? void 0 : _a.run(env);
@@ -63,9 +67,8 @@ var IDE = /** @class */ (function (_super) {
             if (exp1 != null && exp2 == null) {
                 if (exp1.type == type_1.Type.INT) {
                     var tmp = Array.from(env.getValue(this.id));
-                    console.log("VECTOR: " + tmp);
                     var value = tmp[exp1.value];
-                    console.log("VALOR DEL VECTOR: " + value);
+                    valor = value;
                     if (env.getType(this.id) == type_1.Type.INT) {
                         return { value: value, type: type_1.Type.INT };
                     }
@@ -86,19 +89,20 @@ var IDE = /** @class */ (function (_super) {
                         else
                             return { value: false, type: type_1.Type.BOOLEAN };
                     }
-                    else
+                    else {
+                        s.addError(new error_1.Errores("Semantico", "Tipo de dato inexistente", this.line, this.column));
                         return { value: env.getValue(this.id), type: type_1.Type.error };
+                    }
                 }
                 else {
-                    console.log("No es el tipo de dato correcto");
+                    s.addError(new error_1.Errores("Semantico", "Tipo de Datos indice de vector no compatible", this.line, this.column));
                 }
             }
             else if (exp1 != null && exp2 != null) {
                 if (exp1.type == type_1.Type.INT && exp2.type == type_1.Type.INT) {
                     var tmp = Array.from(env.getValue(this.id));
-                    console.log("Matriz: " + tmp);
                     var value = tmp[exp1.value][exp2.value];
-                    console.log("VALOR DEL MATRIZ: " + value);
+                    valor = value;
                     if (env.getType(this.id) == type_1.Type.INT) {
                         return { value: value, type: type_1.Type.INT };
                     }
@@ -119,17 +123,33 @@ var IDE = /** @class */ (function (_super) {
                         else
                             return { value: false, type: type_1.Type.BOOLEAN };
                     }
-                    else
+                    else {
+                        s.addError(new error_1.Errores("Semantico", "Tipo de dato inexistente", this.line, this.column));
                         return { value: env.getValue(this.id), type: type_1.Type.error };
+                    }
                 }
                 else {
-                    console.log("No es el tipo de dato correcto");
+                    s.addError(new error_1.Errores("Semantico", "Tipo de Datos indice de vector no compatible", this.line, this.column));
                 }
             }
         }
         return { value: env.getValue(this.id), type: type_1.Type.error };
     };
-    IDE.prototype.save = function (env) {
+    IDE.prototype.save = function (env) { };
+    IDE.prototype.ast = function () {
+        var arb = "nodo" + this.line + this.column + ";\n";
+        if (this.sw == 0) {
+            arb += "nodo" + this.line + this.column + "[label =\"" + this.id + "\"];\n";
+        }
+        else {
+            if (this.expression1 != null && this.expression2 == null) {
+                arb += "nodo" + this.line + this.column + "[label =\"" + this.id + "[]\"];\n";
+            }
+            else if (this.expression1 != null && this.expression2 == null) {
+                arb += "nodo" + this.line + this.column + "[label =\"" + this.id + "[][]\"];\n";
+            }
+        }
+        return arb;
     };
     return IDE;
 }(Expression_1.Expression));

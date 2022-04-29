@@ -16,7 +16,6 @@ export class Value extends Expression {
 
     public run(): Return {
         
-        console.log("valor: "+this.value)
         if (this.type == Type.INT){
             return { value: Number(this.value), type: Type.INT }
         }else if(this.type == Type.DOUBLE){
@@ -25,7 +24,6 @@ export class Value extends Expression {
             this.value = (this.value).replaceAll("\"","")
             return { value: this.value, type: Type.STRING }
         }else if(this.type == Type.CHAR){
-            console.log("caracter "+this.value)
             this.value = (this.value).replaceAll("\'","")
             return { value: this.value, type: Type.CHAR }
         }else if (this.type == Type.BOOLEAN) {
@@ -35,6 +33,11 @@ export class Value extends Expression {
         else return { value: this.value, type: Type.error }
 
     }
-    public save(env: ENV) {
+    public save(env: ENV) {}
+    
+    public ast(n1:number,n2:number): string {
+        let arb:string =  "nodo"+this.line+n1+this.column+n2+";\n"
+        arb+="nodo"+this.line+n1+this.column+n2+"[label =\""+this.value+"\"];\n"
+        return arb
     }
 }

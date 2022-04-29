@@ -342,7 +342,7 @@ boleano  "true"|"false"
 
 .   { 
         console.log("error lexico");
-        s.addError(new Errores("Lexico","Token no esperado "+yytext,yylloc.first_line,yylloc.first_column))
+        s.addError(new Errores("Lexico",yytext,yylloc.first_line,yylloc.first_column))
     }
 
 /lex
@@ -385,9 +385,9 @@ INSTRUCCION
     | FUNPRINT "puntocoma"      {$$ = $1}
     | FUNPRINTLN "puntocoma"    {$$ = $1}
     | EJECUTAR "puntocoma"      {$$ = $1}
-    | error                     {console.log("Error sintactico") 
+    | error                     {console.log("Error sintactico "+$1+" linea "+@1.first_line+" columna "+@1.first_column) 
                                 var s = Singleton.getInstance()
-                                s.addError(new Errores("Sintactico","Token no esperado "+$1,@1.first_line,@1.first_column))}
+                                s.addError(new Errores("Sintactico",$1,@1.first_line,@1.first_column))}
     |                           {$$ = null}
 ;
 
@@ -511,21 +511,23 @@ CASEDEF
 ;
 
 TRANSFERENCIA
-    : "break" "puntocoma"           {$$=Type.BREAK}
-    | "continue" "puntocoma"        {$$=Type.CONTINUE}
-    | "return" EXPRESION "puntocoma"
-    | "return" "puntocoma"
-    |                               {$$ = null}
+    : "break" "puntocoma"            {$$ = Type.BREAK}
+    | "continue" "puntocoma"         {$$ = Type.CONTINUE}
+    |                                {$$ = null}
 ;
 
 IFSENTENCIA
-    : "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"                       {$$ = new Ifsentencia($3,$6,null,$7,@1.first_line, @1.first_column)}   
-    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" ELSESENTENCIA         {$$ = new Ifsentencia($3,$6,$9,$7,@1.first_line, @1.first_column)}
-    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" else IFSENTENCIA      {$$ = new Ifsentencia($3,$6,$10,$7,@1.first_line, @1.first_column)}
+    : "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"                       {$$ = new Ifsentencia($3,$6,null,$7,null,@1.first_line, @1.first_column)}   
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" ELSESENTENCIA         {$$ = new Ifsentencia($3,$6,$9,$7,null,@1.first_line, @1.first_column)}
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" else IFSENTENCIA      {$$ = new Ifsentencia($3,$6,$10,$7,null,@1.first_line, @1.first_column)}
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES "return" EXPRESION "puntocoma" "llavec"                       {$$ = new Ifsentencia($3,$6,null,null,$8,@1.first_line, @1.first_column)}   
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES "return" EXPRESION "puntocoma" "llavec" ELSESENTENCIA         {$$ = new Ifsentencia($3,$6,$11,null,$8,@1.first_line, @1.first_column)}
+    | "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES "return" EXPRESION "puntocoma" "llavec" else IFSENTENCIA      {$$ = new Ifsentencia($3,$6,$12,null,$8,@1.first_line, @1.first_column)}
 ;
 
 ELSESENTENCIA
-    : "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"  {$$ = new Ifsentencia(null,$3,null,$4,@1.first_line, @1.first_column)}
+    : "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"  {$$ = new Ifsentencia(null,$3,null,$4,null,@1.first_line, @1.first_column)}
+    | "else" "llavea" INSTRUCCIONES "return" EXPRESION "puntocoma" "llavec"  {$$ = new Ifsentencia(null,$3,null,null,$5,@1.first_line, @1.first_column)}
 ;
 
 MODIFICACIONV

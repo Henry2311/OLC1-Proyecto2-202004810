@@ -17,6 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.LogicOption = exports.Logic = void 0;
 var Expression_1 = require("../Abstract/Expression");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var type_1 = require("../Symbol/type");
 var Logic = /** @class */ (function (_super) {
     __extends(Logic, _super);
@@ -31,6 +33,7 @@ var Logic = /** @class */ (function (_super) {
         var _a;
         var izq = (_a = this.left) === null || _a === void 0 ? void 0 : _a.run(env);
         var der = this.right.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         if (izq != null) {
             if (this.type == LogicOption.AND) {
                 if (izq.value == true && der.value == true) {
@@ -48,10 +51,12 @@ var Logic = /** @class */ (function (_super) {
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
                 }
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "No es un dato boolean", this.line, this.column));
+            }
         }
         else if (izq == null) {
             if (this.type == LogicOption.NOT) {
-                console.log("NOT" + der.value);
                 if (der.value == true) {
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
                 }
@@ -59,10 +64,37 @@ var Logic = /** @class */ (function (_super) {
                     return { value: Boolean(true), type: type_1.Type.BOOLEAN };
                 }
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "No es un dato boolean", this.line, this.column));
+            }
         }
         return { value: Boolean(false), type: type_1.Type.BOOLEAN };
     };
-    Logic.prototype.save = function (env) {
+    Logic.prototype.save = function (env) { };
+    Logic.prototype.ast = function (n1, n2) {
+        var arb = "nodo" + (this.line + n1) + "_" + (this.column + n2) + ";\n";
+        arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + "[label =\"" + this.getOp(this.type) + "\"];\n";
+        if (this.left != null) {
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.left.ast(this.line + 3, this.column + 3) + "\n";
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.right.ast(this.line + 4, this.column + 4) + "\n";
+        }
+        else {
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.right.ast(this.line + 4, this.column + 4) + "\n";
+        }
+        return arb;
+    };
+    Logic.prototype.getOp = function (t) {
+        var op = "";
+        if (t == LogicOption.AND) {
+            op = "&&";
+        }
+        else if (t == LogicOption.NOT) {
+            op = "!";
+        }
+        else if (t == LogicOption.OR) {
+            op = "||";
+        }
+        return op;
     };
     return Logic;
 }(Expression_1.Expression));

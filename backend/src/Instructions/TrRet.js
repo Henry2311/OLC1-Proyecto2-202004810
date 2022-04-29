@@ -30,6 +30,8 @@ var TrRet = /** @class */ (function (_super) {
     };
     TrRet.prototype.save = function (env) {
     };
+    TrRet.prototype.ast = function () {
+    };
     return TrRet;
 }(Instruction_1.Instruction));
 exports.TrRet = TrRet;

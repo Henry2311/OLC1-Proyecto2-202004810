@@ -1,21 +1,31 @@
-"use strict";
-exports.__esModule = true;
-var Env_1 = require("./src/Symbol/Env");
-var parser = require("./src/Grammar/grammar");
-var singleton = require("./src/Pattern/Singleton")
-var fs = require("fs");
-var exec = require("child_process")
+const express = require('express')
+const routes = express.Router()
+const ENV = require('../src/Symbol/Env')
+const Parser = require('../src/Grammar/grammar')
+const Singleton = require('../src/Pattern/Singleton')
+const fs = require('fs')
+const exec = require('child_process')
 
-try {
-    var entrada = fs.readFileSync("prueba.txt");
-    var ast = parser.parse(entrada.toString());
-    var env = new Env_1.ENV(null);
-    var s = singleton.Singleton.getInstance()
-    s.addConsola("-----CONSOLA-----\n")
-    s.addAST("nodoPrincipal[label = \"Lista Instrucciones\"];\n")
-    var eject = false;
-    var index = 0;
+var entrada = "";
 
+var s = Singleton.Singleton.getInstance()
+var env = new ENV.ENV(null)
+var eject = false
+var index = 0
+
+routes.get('/', (req, res)=>{
+    res.json({mensaje:"Hola"})
+})
+
+routes.get('/entrada', (req, res)=>{
+    res.json({mensaje:s.getConsola()})
+})
+
+routes.post('/entrada', (req, res)=>{
+    entrada = ""
+    entrada = req.body.mensaje;
+    s.reset()
+    let ast = Parser.parse(entrada)
     for (var _i = 0, ast_1 = ast; _i < ast_1.length; _i++) {
         var instruccion = ast_1[_i];
         try {
@@ -54,19 +64,17 @@ try {
             }
         }
     }
-    console.log(s.getConsola())
-    s.addSymbols(env.getEnv())
-    createFile("error.html", s.getError())
-    createFile("simbolos.html", s.getSymbols())
+
     createFile("AST.dot", "digraph G {\nnode[shape=circle];\n" + s.getAST() + "\n}")
     exec.exec('dot -Tpng AST.dot -o AST.png')
-}
-catch (error) {
-    console.log(error);
-}
+    res.send("Archivo cargado")
+})
+
 
 function createFile(nombre, contenido) {
     fs.writeFile(nombre, contenido, () => {
         console.log('Archivo Creado');
     })
 }
+
+module.exports=routes

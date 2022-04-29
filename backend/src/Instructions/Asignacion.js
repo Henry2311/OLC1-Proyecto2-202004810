@@ -17,6 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.Asignacion = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var Asignacion = /** @class */ (function (_super) {
     __extends(Asignacion, _super);
     function Asignacion(nombre, expresion, line, column) {
@@ -27,21 +29,30 @@ var Asignacion = /** @class */ (function (_super) {
     }
     Asignacion.prototype.run = function (env) {
         var exp = this.expresion.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         if (env.search(this.nombre)) {
-            //ahora toca ver que sean del mismo tipo
             if (env.getType(this.nombre) == exp.type) {
                 env.setVar(this.nombre, exp.value);
-                console.log("variable [" + this.nombre + "] actualizada con exito...");
             }
             else {
-                console.log("error semantico, no se puede asignar un valor de otro tipo a la variable [" + this.nombre + "]");
+                s.addError(new error_1.Errores("Semantico", "Tipo de dato incompatible, no se puede asignar el valor a " + this.nombre, this.line, this.column));
             }
         }
         else {
-            console.log("la variable [" + this.nombre + "] no fue encontrada...");
+            s.addError(new error_1.Errores("Semantico", "La variable no ha sido creada", this.line, this.column));
         }
     };
-    Asignacion.prototype.save = function (env) {
+    Asignacion.prototype.save = function (env) { };
+    Asignacion.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + ";\n";
+        arb += "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Asignacion\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"" + this.nombre + "\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> " + this.expresion.ast(this.line + 2, this.column + 2);
+        s.addAST(arb);
     };
     return Asignacion;
 }(Instruction_1.Instruction));

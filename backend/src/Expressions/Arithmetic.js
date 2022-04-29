@@ -18,6 +18,8 @@ exports.__esModule = true;
 exports.ArithmeticOption = exports.Arithmetic = void 0;
 var Expression_1 = require("../Abstract/Expression");
 var type_1 = require("../Symbol/type");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var Arithmetic = /** @class */ (function (_super) {
     __extends(Arithmetic, _super);
     function Arithmetic(left, right, type, line, column) {
@@ -31,6 +33,7 @@ var Arithmetic = /** @class */ (function (_super) {
         var _a;
         var izq = (_a = this.left) === null || _a === void 0 ? void 0 : _a.run(env);
         var der = this.right.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         if (izq != null) {
             if (this.type == ArithmeticOption.MAS) {
                 if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -92,6 +95,9 @@ var Arithmetic = /** @class */ (function (_super) {
                 else if ((der.type == type_1.Type.CHAR && izq.type == type_1.Type.STRING) || (der.type == type_1.Type.STRING && izq.type == type_1.Type.CHAR)) {
                     return { value: izq.value + "" + der.value, type: type_1.Type.STRING };
                 }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                }
             }
             else if (this.type == ArithmeticOption.MENOS) {
                 if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -135,6 +141,9 @@ var Arithmetic = /** @class */ (function (_super) {
                     var tmp = (der.value).charCodeAt(0);
                     return { value: izq.value - tmp, type: type_1.Type.DOUBLE };
                 }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                }
             }
             else if (this.type == ArithmeticOption.POR) {
                 if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -162,10 +171,13 @@ var Arithmetic = /** @class */ (function (_super) {
                     var tmp = (der.value).charCodeAt(0);
                     return { value: izq.value * tmp, type: type_1.Type.DOUBLE };
                 }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                }
             }
             else if (this.type == ArithmeticOption.DIV) {
                 if (der.value == 0) {
-                    console.log("Math error");
+                    s.addError(new error_1.Errores("Semantico", "Error matematico division por 0", this.line, this.column));
                 }
                 else {
                     if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -193,6 +205,9 @@ var Arithmetic = /** @class */ (function (_super) {
                         var tmp = (der.value).charCodeAt(0);
                         return { value: izq.value / tmp, type: type_1.Type.DOUBLE };
                     }
+                    else {
+                        s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                    }
                 }
             }
             else if (this.type == ArithmeticOption.POW) {
@@ -205,6 +220,9 @@ var Arithmetic = /** @class */ (function (_super) {
                 else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
                     return { value: Math.pow(izq.value, der.value), type: type_1.Type.DOUBLE };
                 }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                }
             }
             else if (this.type == ArithmeticOption.MOD) {
                 if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -216,6 +234,9 @@ var Arithmetic = /** @class */ (function (_super) {
                 else if (der.type == type_1.Type.DOUBLE && izq.type == type_1.Type.DOUBLE) {
                     return { value: izq.value % der.value, type: type_1.Type.DOUBLE };
                 }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                }
             }
         }
         else {
@@ -226,11 +247,50 @@ var Arithmetic = /** @class */ (function (_super) {
                 else if (der.type == type_1.Type.DOUBLE) {
                     return { value: -der.value, type: type_1.Type.DOUBLE };
                 }
+                else {
+                    s.addError(new error_1.Errores("Semantico", "Tipos de datos incompatibles", this.line, this.column));
+                }
             }
         }
         return { value: null, type: type_1.Type.error };
     };
-    Arithmetic.prototype.save = function (env) {
+    Arithmetic.prototype.save = function (env) { };
+    Arithmetic.prototype.ast = function (n1, n2) {
+        var arb = "nodo" + (this.line + n1) + "_" + (this.column + n2) + ";\n";
+        arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + "[label =\"" + this.getOp(this.type) + "\"];\n";
+        if (this.left != null) {
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.left.ast(this.line + 3, this.column + 3) + "\n";
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.right.ast(this.line + 4, this.column + 4) + "\n";
+        }
+        else {
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.right.ast(this.line + 4, this.column + 4) + "\n";
+        }
+        return arb;
+    };
+    Arithmetic.prototype.getOp = function (t) {
+        var op = "";
+        if (t == ArithmeticOption.MAS) {
+            op = "+";
+        }
+        else if (t == ArithmeticOption.MENOS) {
+            op = "-";
+        }
+        else if (t == ArithmeticOption.POR) {
+            op = "*";
+        }
+        else if (t == ArithmeticOption.DIV) {
+            op = "/";
+        }
+        else if (t == ArithmeticOption.MOD) {
+            op = "%";
+        }
+        else if (t == ArithmeticOption.POW) {
+            op = "^";
+        }
+        else if (t == ArithmeticOption.NEGACION) {
+            op = "-";
+        }
+        return op;
     };
     return Arithmetic;
 }(Expression_1.Expression));

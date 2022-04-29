@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.cicloFor = void 0;
 var Instruction_1 = require("../Abstract/Instruction");
+var Singleton_1 = require("../Pattern/Singleton");
 var Env_1 = require("../Symbol/Env");
 var type_1 = require("../Symbol/type");
 var cicloFor = /** @class */ (function (_super) {
@@ -61,7 +62,35 @@ var cicloFor = /** @class */ (function (_super) {
             }
         }
     };
-    cicloFor.prototype.save = function (env) {
+    cicloFor.prototype.save = function (env) { };
+    cicloFor.prototype.ast = function () {
+        var s = Singleton_1.Singleton.getInstance();
+        var arb = "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
+        arb += "nodo1" + this.line + this.column + "[label = \"Ciclo For\"];\n";
+        arb += "nodo2" + this.line + this.column + "[label = \"For\"];\n"; //For declaracion logica incremento Lista
+        arb += "nodo3" + this.line + this.column + "[label = \"Lista Instrucciones\"];\n";
+        arb += "nodo" + this.line + this.column + " -> nodo1" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo2" + this.line + this.column + ";\n";
+        arb += "nodo1" + this.line + this.column + " -> nodo3" + this.line + this.column + ";\n";
+        if (this.declaraccion != null) {
+            this.declaraccion.ast();
+            s.addAST("nodo1" + this.line + this.column + " -> nodo" + this.declaraccion.line + this.declaraccion.column + ";\n");
+        }
+        arb += "nodo1" + this.line + this.column + " -> " + this.condicon.ast(this.line + 2, this.column + 2) + "\n";
+        if (this.incremento != null) {
+            this.incremento.ast();
+            s.addAST("nodo1" + this.line + this.column + " -> nodo" + this.incremento.line + this.incremento.column + ";\n");
+        }
+        if (this.bloque != null) {
+            for (var _i = 0, _a = this.bloque; _i < _a.length; _i++) {
+                var inst = _a[_i];
+                if (inst != null) {
+                    inst.ast();
+                    s.addAST("nodo3".concat(this.line).concat(this.column, " -> nodo").concat(inst.line).concat(inst.column, ";\n"));
+                }
+            }
+        }
+        s.addAST(arb);
     };
     return cicloFor;
 }(Instruction_1.Instruction));

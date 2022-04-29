@@ -1,12 +1,2 @@
-
-run main();
-
-main():void{
-    println("prueba funcion");
-    int x = suma(18,3);
-    print(x);
-}
-
-suma(int var1, int var2):int{
-    return var1+var2;
-}
+int x = 10;
+print(x);

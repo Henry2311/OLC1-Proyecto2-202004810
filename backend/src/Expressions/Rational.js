@@ -17,6 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.RationalOption = exports.Rational = void 0;
 var Expression_1 = require("../Abstract/Expression");
+var Singleton_1 = require("../Pattern/Singleton");
+var error_1 = require("../Symbol/error");
 var type_1 = require("../Symbol/type");
 var Rational = /** @class */ (function (_super) {
     __extends(Rational, _super);
@@ -30,6 +32,7 @@ var Rational = /** @class */ (function (_super) {
     Rational.prototype.run = function (env) {
         var izq = this.left.run(env);
         var der = this.right.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         if (this.type == RationalOption.IGUALQ) {
             if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
                 if (izq.value == der.value) {
@@ -129,6 +132,9 @@ var Rational = /** @class */ (function (_super) {
                 }
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de Dato incompatible", this.line, this.column));
             }
         }
         else if (this.type == RationalOption.MAYORQ) {
@@ -231,6 +237,9 @@ var Rational = /** @class */ (function (_super) {
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de Dato incompatible", this.line, this.column));
+            }
         }
         else if (this.type == RationalOption.MENORQ) {
             if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -331,6 +340,9 @@ var Rational = /** @class */ (function (_super) {
                 }
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de Dato incompatible", this.line, this.column));
             }
         }
         else if (this.type == RationalOption.MAYORIGQ) {
@@ -433,6 +445,9 @@ var Rational = /** @class */ (function (_super) {
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de Dato incompatible", this.line, this.column));
+            }
         }
         else if (this.type == RationalOption.MENORIGQ) {
             if (der.type == type_1.Type.INT && izq.type == type_1.Type.INT) {
@@ -533,6 +548,9 @@ var Rational = /** @class */ (function (_super) {
                 }
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
+            }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de Dato incompatible", this.line, this.column));
             }
         }
         else if (this.type == RationalOption.NOIGUAL) {
@@ -635,10 +653,46 @@ var Rational = /** @class */ (function (_super) {
                 else
                     return { value: Boolean(false), type: type_1.Type.BOOLEAN };
             }
+            else {
+                s.addError(new error_1.Errores("Semantico", "Tipo de Dato incompatible", this.line, this.column));
+            }
         }
         return { value: Boolean(false), type: type_1.Type.BOOLEAN };
     };
-    Rational.prototype.save = function (env) {
+    Rational.prototype.save = function (env) { };
+    Rational.prototype.ast = function (n1, n2) {
+        var arb = "nodo" + (this.line + n1) + "_" + (this.column + n2) + ";\n";
+        arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + "[label =\"" + this.getOp(this.type) + "\"];\n";
+        if (this.left != null) {
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.left.ast(this.line + 3, this.column + 3) + "\n";
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.right.ast(this.line + 4, this.column + 4) + "\n";
+        }
+        else {
+            arb += "nodo" + (this.line + n1) + "_" + (this.column + n2) + " -> " + this.right.ast(this.line + 4, this.column + 4) + "\n";
+        }
+        return arb;
+    };
+    Rational.prototype.getOp = function (t) {
+        var op = "";
+        if (t == RationalOption.IGUALQ) {
+            op = "==";
+        }
+        else if (t == RationalOption.MAYORQ) {
+            op = ">";
+        }
+        else if (t == RationalOption.MENORQ) {
+            op = "<";
+        }
+        else if (t == RationalOption.MAYORIGQ) {
+            op = ">=";
+        }
+        else if (t == RationalOption.MENORIGQ) {
+            op = "<=";
+        }
+        else if (t == RationalOption.NOIGUAL) {
+            op = "!=";
+        }
+        return op;
     };
     return Rational;
 }(Expression_1.Expression));
