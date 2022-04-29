@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import {
   Container,
   LogoContainer,
@@ -19,17 +19,15 @@ import {
   FaGlasses,
 } from "react-icons/fa";
 import { IconContext } from "react-icons";
+import { InputContext } from '../tools/Context'
 
-class NavBar extends React.Component{
-  constructor (props){
-    super(props)
-
-    this.state = {myValue : ''}
-  }
-  
- 
-  render(){
+  function NavBar(){
     
+
+    const [fileValue, setfileValue] = useState('')
+
+    const {EntradaState,setEntradaState} = useContext(InputContext) 
+
     const Open = ( e ) => {
   
       const file = e.target.files[0];
@@ -41,15 +39,14 @@ class NavBar extends React.Component{
   
       fileReader.onload = () => {
         console.log( fileReader.result );
-        this.setState({myValue : fileReader.result});
+        setfileValue( fileReader.result );
+        setEntradaState( fileReader.result );
       }
   
       fileReader.onerror = () => {
         console.log( fileReader.error );
       }
-  
     }
-    const {handleEntrada} = this.props;
 
     return (
       <Container>
@@ -62,7 +59,7 @@ class NavBar extends React.Component{
   
             <Menu>
               <MenuItem>
-                <MenuItemLink >
+                <MenuItemLink onClick={()=>{console.log("Crear nuevo archivo")}}>
                   <div>
                     <FaHome />
                     NUEVO
@@ -115,14 +112,9 @@ class NavBar extends React.Component{
             </Menu>
           </IconContext.Provider>
         </Wrapper>
-        <InputAux onChange={handleEntrada(this.state.myValue)} defaultValue={this.state.myValue}/>
       </Container>
       
     );
   };
-
-}
-
-
 
 export default NavBar;
