@@ -67,7 +67,7 @@ import { InputContext } from '../tools/Context'
                 </MenuItemLink>
               </MenuItem>
               <MenuItem>
-                <MenuItemLink >
+                <MenuItemLink>
                   <div>
                     <FaUserAlt />
                     <InputFileContainer>
@@ -86,7 +86,7 @@ import { InputContext } from '../tools/Context'
                 </MenuItemLink>
               </MenuItem>
               <MenuItem>
-                <MenuItemLink >
+                <MenuItemLink  href="http://192.168.1.69:8080/error.html">
                   <div>
                     <FaGlasses />
                     ERRORES
@@ -94,7 +94,7 @@ import { InputContext } from '../tools/Context'
                 </MenuItemLink>
               </MenuItem>
               <MenuItem>
-                <MenuItemLink >
+                <MenuItemLink href="http://192.168.1.69:8080/arbolast.html">
                   <div>
                     <FaGlasses />
                     ARBOL AST
@@ -102,7 +102,7 @@ import { InputContext } from '../tools/Context'
                 </MenuItemLink>
               </MenuItem>
               <MenuItem>
-                <MenuItemLink >
+                <MenuItemLink href="http://192.168.1.69:8080/simbolos.html">
                   <div>
                     <FaGlasses />
                     SIMBOLOS

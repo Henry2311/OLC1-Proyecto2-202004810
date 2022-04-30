@@ -1,0 +1,10 @@
+Universidad de San Carlos de Guatemala
+Facultad de Ingeniería
+Escuela de Ciencias y Sistemas
+Organizacion de Lenguajes y Compiladores 1
+
+Henry Ronely Mendoza Aguilar
+carnet: 202004810
+
+Link del Repositorio:
+https://github.com/Henry2311/OLC1-Proyecto2-202004810

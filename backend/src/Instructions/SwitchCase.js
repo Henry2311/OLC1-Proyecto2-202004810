@@ -30,6 +30,7 @@ var SwitchCase = /** @class */ (function (_super) {
     }
     SwitchCase.prototype.run = function (env) {
         var exp = this.expression.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         if (exp != null) {
             if (this.brk == 1) {
                 if (exp.value == env.getValue("__compare__")) {
@@ -40,6 +41,7 @@ var SwitchCase = /** @class */ (function (_super) {
                             if (ins != null)
                                 ins.run(newEnv);
                         }
+                        s.addSymbols(newEnv.getEnv());
                         return 1;
                     }
                 }
@@ -53,6 +55,7 @@ var SwitchCase = /** @class */ (function (_super) {
                             if (ins != null)
                                 ins.run(newEnv);
                         }
+                        s.addSymbols(newEnv.getEnv());
                         return 0;
                     }
                 }

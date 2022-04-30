@@ -50,7 +50,7 @@ function Entrada(){
 
       //reiniciando state
       setentrada({mensaje : EntradaState.toString()})
-      alert('Se ha creado el curso correctamente')
+      alert('Se ha compilado el archivo')
     } 
 
     if(mensaje === ""){

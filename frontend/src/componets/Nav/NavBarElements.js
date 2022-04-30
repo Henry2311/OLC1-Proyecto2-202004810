@@ -79,6 +79,7 @@ export const MenuItemLink = styled.a`
   font-size: 1rem;
   font-weight: 300;
   cursor: pointer;
+  text-decoration: none;
   transition: 0.5s all ease;
   &:hover {
     color: #fff;

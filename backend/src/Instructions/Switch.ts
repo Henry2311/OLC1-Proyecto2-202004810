@@ -17,6 +17,7 @@ export class Switch extends Instruction{
     public run(env: ENV) {
         const exp = this.expresion.run(env)
         let brk;
+        var s = Singleton.getInstance()
         if(this.cases!=null){
             const newEnv = new ENV(env)
             newEnv.saveVar("__compare__",exp.value,exp.type,null,null)
@@ -24,12 +25,14 @@ export class Switch extends Instruction{
                 if(csc!=null)brk = csc.run(newEnv)
                 if(brk==1)break
             }
+            s.addSymbols(newEnv.getEnv())
         }
         if(this.def != null && brk == 0){
             const newEnv = new ENV(env)
             for(const ins of this.def){
                 if(ins!=null)ins.run(newEnv)
             }
+            s.addSymbols(newEnv.getEnv())
         }
     }
     public save(env:ENV){}

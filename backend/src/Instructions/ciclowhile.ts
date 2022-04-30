@@ -36,6 +36,8 @@ export class cicloWhile extends Instruction{
                     }
                 }
             logica = this.logic.run(env)
+            var s = Singleton.getInstance()
+            s.addSymbols(newEnv.getEnv())
             if(this.transfer != null || aux!=null){
                 if(this.transfer == Type.BREAK || aux == Type.BREAK){
                     break

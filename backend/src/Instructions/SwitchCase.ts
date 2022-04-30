@@ -15,6 +15,7 @@ export class SwitchCase extends Instruction{
 
     public run(env:ENV){
         const exp = this.expression.run(env)
+        var s = Singleton.getInstance()
         if(exp!=null){
             if(this.brk==1){
                 if(exp.value == env.getValue("__compare__")){
@@ -23,6 +24,7 @@ export class SwitchCase extends Instruction{
                         for(const ins of this.instructions){
                             if(ins!=null) ins.run(newEnv)
                         }
+                        s.addSymbols(newEnv.getEnv())
                         return 1
                     }
                 }
@@ -33,6 +35,7 @@ export class SwitchCase extends Instruction{
                         for(const ins of this.instructions){
                             if(ins!=null) ins.run(newEnv)
                         }
+                        s.addSymbols(newEnv.getEnv())
                         return 0
                     }
                 }

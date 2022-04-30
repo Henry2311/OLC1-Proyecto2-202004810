@@ -52,6 +52,8 @@ var cicloFor = /** @class */ (function (_super) {
                     }
                 }
             this.incremento.run(newEnv);
+            var s = Singleton_1.Singleton.getInstance();
+            s.addSymbols(newEnv.getEnv());
             if (this.transfer != null || aux != null) {
                 if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
                     break;

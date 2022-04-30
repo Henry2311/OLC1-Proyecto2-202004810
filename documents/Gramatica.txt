@@ -1,0 +1,179 @@
+INICIO -> INSTRUCCIONES EOF  
+
+
+INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION 
+    | INSTRUCCION              
+
+INSTRUCCION -> DECLARACION "puntocoma"   
+    | ASIGNACION "puntocoma"    
+    | INDECRE "puntocoma"            
+    | MODIFICACIONV "puntocoma" 
+    | IFSENTENCIA               
+    | SWITCHSENTENCIA           
+    | CICLOWHILE                
+    | CICLOFOR                  
+    | CICLODOWHILE              
+    | FUNCTION
+    | METODO                    
+    | LLAMADA "puntocoma"       
+    | FUNPRINT "puntocoma"      
+    | FUNPRINTLN "puntocoma"   
+    | EJECUTAR "puntocoma"     
+   
+
+EJECUTAR -> "run" "identificador" "parena" LISTAEXP "parenc"  
+    | "run" "identificador" "parena" "parenc"           
+
+LISTAEXP -> LISTAEXP "coma" EXPRESION 
+    | EXPRESION                 
+
+NATIVAS -> FUNLOWER      
+    | FUNUPPER      
+    | FUNROUND      
+    | FUNLENGTH     
+    | FUNTYPE      
+    | FUNTOSTRING   
+    | FUNTOCHAR    
+
+FUNTOCHAR -> "tochararray" "parena" EXPRESION "parenc"     
+
+FUNTOSTRING ->  "tostring" "parena" EXPRESION "parenc"       
+
+FUNTYPE -> "typeof" "parena" EXPRESION "parenc"         
+
+FUNLENGTH -> "length" "parena" EXPRESION "parenc"          
+
+FUNROUND -> "round" "parena" EXPRESION "parenc"  
+         
+FUNLOWER -> "tolower" "parena" EXPRESION "parenc"         
+
+FUNUPPER -> "toupper" "parena" EXPRESION "parenc"        
+
+FUNPRINT -> "print" "parena" EXPRESION "parenc"   
+
+FUNPRINTLN -> "println" "parena" EXPRESION "parenc" 
+
+METODO -> "identificador" "parena" PARAMETROS "parenc" "dospunto" "void" "llavea" INSTRUCCIONES "llavec" 
+    | "identificador" "parena" "parenc" "dospunto" "void" "llavea" INSTRUCCIONES "llavec"            
+    | "identificador" "parena" PARAMETROS "parenc" "llavea" INSTRUCCIONES "llavec"                  
+    | "identificador" "parena" "parenc" "llavea" INSTRUCCIONES "llavec"                             
+
+FUNCTION -> "identificador" "parena" PARAMETROS "parenc" "dospunto" TIPO "llavea" INSTRUCCIONES "return" EXPRESION puntocoma "llavec" 
+
+PARAMETROS -> PARAMETROS "coma" DECLARACION     
+    		| DECLARACION                       
+
+
+LLAMADA -> "identificador" "parena" LLAMADAP "parenc"   
+    | "identificador" "parena" "parenc"   
+          
+LLAMADAP -> LLAMADAP "coma" EXPRESION   
+   	| EXPRESION                  
+
+CICLODOWHILE -> "do" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" "while" "parena" EXPRESION "parenc"   
+
+CICLOFOR -> "for" "parena" INICIOFOR "puntocoma" EXPRESION "puntocoma" ACTUALIZACION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"   
+
+ACTUALIZACION -> INDECRE          
+            | ASIGNACION        
+
+
+INICIOFOR -> DECLARACION       
+    	| ASIGNACION        
+
+CICLOWHILE -> "while" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"    
+
+SWITCHSENTENCIA -> "switch" "parena" EXPRESION "parenc" "llavea" LISTACASES CASEDEF "llavec" 
+
+LISTACASES -> LISTACASES "case" EXPRESION "dospunto" INSTRUCCIONES "break" "puntocoma"  
+    	| "case" EXPRESION "dospunto" INSTRUCCIONES "break" "puntocoma"             
+    	| LISTACASES "case" EXPRESION "dospunto" INSTRUCCIONES                      
+    	| "case" EXPRESION "dospunto" INSTRUCCIONES                                 
+
+CASEDEF -> "default" "dospunto" INSTRUCCIONES "break" "puntocoma"      
+
+TRANSFERENCIA -> "break" "puntocoma"           
+   	 | "continue" "puntocoma"         
+   	 | "return" EXPRESION "puntocoma"
+
+IFSENTENCIA -> "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"                      
+    	| "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" ELSESENTENCIA         
+    	| "if" "parena" EXPRESION "parenc" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec" else IFSENTENCIA     
+        
+
+ELSESENTENCIA -> "else" "llavea" INSTRUCCIONES TRANSFERENCIA "llavec"  
+    | "else" "llavea" INSTRUCCIONES "return" EXPRESION "puntocoma" "llavec"  
+
+MODIFICACIONV -> "identificador" "corchetea" EXPRESION "corchetec" "igual" EXPRESION                                  
+   	      | "identificador" "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec" "igual" EXPRESION 
+
+ACCESOV -> "identificador" "corchetea" EXPRESION "corchetec"                                     
+    	| "identificador" "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec"   
+
+LISTAVALORESV -> LISTAVALORESV "coma" VALOR                                 
+    		| VALOR                                                      
+
+LISTAVALORESM -> LISTAVALORESM "coma" "corchetea" LISTAVALORESV "corchetec" 
+    		| "corchetea" LISTAVALORESV "corchetec"                       
+
+INDECRE -> "identificador" "plus"                  
+   	 | "identificador" "minus"           
+
+CASTEO -> "parena" TIPO "parenc" EXPRESION  
+
+TERNARY -> EXPRESION "ternario" EXPRESION "dospunto" EXPRESION   
+
+ASIGNACION -> "identificador" "igual" EXPRESION    
+
+DECLARACION -> TIPO "identificador"                   
+    	    | TIPO "identificador" "igual" EXPRESION 
+    	    | TIPO  LISTAID                          
+    	    | TIPO  LISTAID "igual" EXPRESION        
+    	    | TIPO "identificador" "corchetea" "corchetec" "igual" "new" TIPO "corchetea" EXPRESION "corchetec" 
+    	    | TIPO "identificador" "corchetea" "corchetec" "corchetea" "corchetec" "igual" "new" TIPO "corchetea" EXPRESION "corchetec" "corchetea" EXPRESION "corchetec" 
+    	    | TIPO "identificador" "corchetea" "corchetec" "igual" "corchetea" LISTAVALORESV "corchetec" 
+    	    | TIPO "identificador" "corchetea" "corchetec" "corchetea" "corchetec" "igual" "corchetea" LISTAVALORESM "corchetec" 
+    	    | TIPO "identificador" "corchetea" "corchetec" "igual" FUNTOCHAR    
+
+LISTAID -> LISTAID "coma" "identificador"    
+    	| "identificador"                   
+
+
+EXPRESION -> "menos" EXPRESION %prec UMENOS   
+    	|  EXPRESION "mas" EXPRESION       
+    	|  EXPRESION "menos" EXPRESION      
+    	|  EXPRESION "por"  EXPRESION       
+    	|  EXPRESION "divi" EXPRESION       
+    	|  EXPRESION "mod" EXPRESION        
+    	|  EXPRESION "pow" EXPRESION        
+    	|  EXPRESION "igualq" EXPRESION     
+    	|  EXPRESION "mayorq" EXPRESION     
+    	|  EXPRESION "menorq" EXPRESION     
+    	|  EXPRESION "mayorigq" EXPRESION   
+    	|  EXPRESION "menorigq" EXPRESION   
+    	|  EXPRESION "noigual" EXPRESION    
+    	|  "negacion" EXPRESION             
+    	|  EXPRESION "and" EXPRESION        
+    	|  EXPRESION "or" EXPRESION         
+    	|  "parena" EXPRESION "parenc"      
+    	|  INDECRE                          
+    	|  ACCESOV                          
+    	|  CASTEO                           
+    	|  TERNARY                          
+    	|  LLAMADA                         
+    	|  NATIVAS                          
+    	|  VALOR                            
+
+TIPO -> int    
+     | double  
+     | string  
+     | char    
+     | boolean 
+
+
+VALOR -> valorint        
+       | valordouble    
+       | valorstring     
+       | valorchar      
+       | valorboolean    
+       | identificador  

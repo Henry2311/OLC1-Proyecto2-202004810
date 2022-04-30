@@ -64,9 +64,14 @@ routes.post('/entrada', (req, res)=>{
             }
         }
     }
+    s.addSymbols(env.getEnv())
+    
+    createFile(".\\Server\\public\\error.html", s.getError())
+    createFile(".\\Server\\public\\simbolos.html", s.getSymbols())
 
-    createFile("AST.dot", "digraph G {\nnode[shape=circle];\n" + s.getAST() + "\n}")
-    exec.exec('dot -Tpng AST.dot -o AST.png')
+    createFile(".\\Server\\public\\AST.dot", "digraph G {\nnode[shape=circle];\n" + s.getAST() + "\n}")
+    exec.exec('dot -Tpng .\\Server\\public\\AST.dot -o .\\Server\\public\\AST.png')
+    
     res.send("Archivo cargado")
 })
 

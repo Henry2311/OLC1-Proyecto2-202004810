@@ -31,6 +31,7 @@ var Switch = /** @class */ (function (_super) {
     Switch.prototype.run = function (env) {
         var exp = this.expresion.run(env);
         var brk;
+        var s = Singleton_1.Singleton.getInstance();
         if (this.cases != null) {
             var newEnv = new Env_1.ENV(env);
             newEnv.saveVar("__compare__", exp.value, exp.type, null, null);
@@ -41,6 +42,7 @@ var Switch = /** @class */ (function (_super) {
                 if (brk == 1)
                     break;
             }
+            s.addSymbols(newEnv.getEnv());
         }
         if (this.def != null && brk == 0) {
             var newEnv = new Env_1.ENV(env);
@@ -49,6 +51,7 @@ var Switch = /** @class */ (function (_super) {
                 if (ins != null)
                     ins.run(newEnv);
             }
+            s.addSymbols(newEnv.getEnv());
         }
     };
     Switch.prototype.save = function (env) { };

@@ -28,7 +28,11 @@ export class Singleton{
     }
 
     public addSymbols(data:Map<string,Symbol>){
-        this.symbols = data
+        let sym = 0
+        data.forEach((d)=>{
+            this.symbols.set("Symbol"+sym,d)
+            sym+=1
+        })
     }
 
     public getSymbols():string{
@@ -58,15 +62,15 @@ export class Singleton{
         
         this.symbols.forEach(s=>{
             content+="<tr>\n"
-            content+="<td style=\"color: red; font-size: 1.2rem;>"+s.id+"</td>\n"
+            content+="<td style=\"color: white; font-size: 1.2rem;\">"+s.id+"</td>\n"
             if(s.instruction==null && s.parameter==null){
-                content+="<td style=\"color: white; font-size: 1.2rem;>Variable</td>\n"
-                content+="<td style=\"color: white; font-size: 1.2rem;>"+this.getTipo(s.type)+"</td>\n"
-                content+="<td style=\"color: white; font-size: 1.2rem;>"+s.value+"</td>\n"
+                content+="<td style=\"color: white; font-size: 1.2rem;\">Variable</td>\n"
+                content+="<td style=\"color: white; font-size: 1.2rem;\">"+this.getTipo(s.type)+"</td>\n"
+                content+="<td style=\"color: white; font-size: 1.2rem;\">"+s.value+"</td>\n"
             }else{
-                content+="<td style=\"color: white; font-size: 1.2rem;>Funcion/Metodo</td>\n"
-                content+="<td style=\"color: white; font-size: 1.2rem;>"+this.getTipo(s.type)+"</td>\n"
-                content+="<td style=\"color: white; font-size: 1.2rem;>None</td>\n"
+                content+="<td style=\"color: white; font-size: 1.2rem;\">Funcion/Metodo</td>\n"
+                content+="<td style=\"color: white; font-size: 1.2rem;\">"+this.getTipo(s.type)+"</td>\n"
+                content+="<td style=\"color: white; font-size: 1.2rem;\">None</td>\n"
             }
             
             content+="</tr>\n"
@@ -119,7 +123,7 @@ export class Singleton{
             }
         }else{
             content+="<tr>\n"
-            content+="<td>No hay errores</td>\n"
+            content+="<td style=\"color: white; font-size: 1.2rem;\" colspan=\"4\">No hay errores</td>\n"
             content+="</tr>\n"
         }
         

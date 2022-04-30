@@ -35,6 +35,7 @@ var Ifsentencia = /** @class */ (function (_super) {
     Ifsentencia.prototype.run = function (env) {
         var _a, _b;
         var logica = (_a = this.logic) === null || _a === void 0 ? void 0 : _a.run(env);
+        var s = Singleton_1.Singleton.getInstance();
         var aux;
         if (this.returnF != null) {
             (_b = this.instruction) === null || _b === void 0 ? void 0 : _b.push(new TrRet_1.TrRet(this.returnF, this.line, this.column));
@@ -58,9 +59,11 @@ var Ifsentencia = /** @class */ (function (_super) {
                         }
                         else if (t != undefined) {
                             var auxR = t;
+                            s.addSymbols(newEnv.getEnv());
                             return auxR;
                         }
                     }
+                s.addSymbols(newEnv.getEnv());
                 if (this.transfer != null || aux != null) {
                     if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
                         return type_1.Type.BREAK;
@@ -90,9 +93,11 @@ var Ifsentencia = /** @class */ (function (_super) {
                         }
                         else if (t != undefined) {
                             var auxR = t;
+                            s.addSymbols(newEnv.getEnv());
                             return auxR;
                         }
                     }
+                s.addSymbols(newEnv.getEnv());
                 if (this.transfer != null || aux != null) {
                     if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
                         return type_1.Type.BREAK;
@@ -134,9 +139,11 @@ var Ifsentencia = /** @class */ (function (_super) {
                     }
                     else if (t != undefined) {
                         var auxR = t;
+                        s.addSymbols(newEnv.getEnv());
                         return auxR;
                     }
                 }
+            s.addSymbols(newEnv.getEnv());
             if (this.transfer != null || aux != null) {
                 if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
                     return type_1.Type.BREAK;
@@ -149,7 +156,6 @@ var Ifsentencia = /** @class */ (function (_super) {
     };
     Ifsentencia.prototype.save = function (env) { };
     Ifsentencia.prototype.ast = function () {
-        //if logic lista else if logic lista else lista
         var s = Singleton_1.Singleton.getInstance();
         var arb = "nodo" + this.line + this.column + "[label = \"Instruccion\"];\n";
         arb += "nodo1" + this.line + this.column + "[label = \"Sentencia IF\"];\n";

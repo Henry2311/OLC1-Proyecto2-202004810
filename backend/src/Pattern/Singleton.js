@@ -22,7 +22,12 @@ var Singleton = /** @class */ (function () {
         return this.consola;
     };
     Singleton.prototype.addSymbols = function (data) {
-        this.symbols = data;
+        var _this = this;
+        var sym = 0;
+        data.forEach(function (d) {
+            _this.symbols.set("Symbol" + sym, d);
+            sym += 1;
+        });
     };
     Singleton.prototype.getSymbols = function () {
         var _this = this;
@@ -49,16 +54,16 @@ var Singleton = /** @class */ (function () {
         content += "</thead>\n";
         this.symbols.forEach(function (s) {
             content += "<tr>\n";
-            content += "<td style=\"color: red; font-size: 1.2rem;>" + s.id + "</td>\n";
+            content += "<td style=\"color: white; font-size: 1.2rem;\">" + s.id + "</td>\n";
             if (s.instruction == null && s.parameter == null) {
-                content += "<td style=\"color: white; font-size: 1.2rem;>Variable</td>\n";
-                content += "<td style=\"color: white; font-size: 1.2rem;>" + _this.getTipo(s.type) + "</td>\n";
-                content += "<td style=\"color: white; font-size: 1.2rem;>" + s.value + "</td>\n";
+                content += "<td style=\"color: white; font-size: 1.2rem;\">Variable</td>\n";
+                content += "<td style=\"color: white; font-size: 1.2rem;\">" + _this.getTipo(s.type) + "</td>\n";
+                content += "<td style=\"color: white; font-size: 1.2rem;\">" + s.value + "</td>\n";
             }
             else {
-                content += "<td style=\"color: white; font-size: 1.2rem;>Funcion/Metodo</td>\n";
-                content += "<td style=\"color: white; font-size: 1.2rem;>" + _this.getTipo(s.type) + "</td>\n";
-                content += "<td style=\"color: white; font-size: 1.2rem;>None</td>\n";
+                content += "<td style=\"color: white; font-size: 1.2rem;\">Funcion/Metodo</td>\n";
+                content += "<td style=\"color: white; font-size: 1.2rem;\">" + _this.getTipo(s.type) + "</td>\n";
+                content += "<td style=\"color: white; font-size: 1.2rem;\">None</td>\n";
             }
             content += "</tr>\n";
         });
@@ -104,7 +109,7 @@ var Singleton = /** @class */ (function () {
         }
         else {
             content += "<tr>\n";
-            content += "<td>No hay errores</td>\n";
+            content += "<td style=\"color: white; font-size: 1.2rem;\" colspan=\"4\">No hay errores</td>\n";
             content += "</tr>\n";
         }
         content += "</table>\n";

@@ -62,6 +62,7 @@ var Call = /** @class */ (function (_super) {
                         if (retn != undefined) {
                             var auxR = retn;
                             if (fun.type == auxR.type) {
+                                s.addSymbols(newEnv.getEnv());
                                 return auxR;
                             }
                             else {
@@ -69,6 +70,7 @@ var Call = /** @class */ (function (_super) {
                             }
                         }
                     }
+                    s.addSymbols(newEnv.getEnv());
                 }
             }
             else {
@@ -80,6 +82,7 @@ var Call = /** @class */ (function (_super) {
                         if (retn != undefined) {
                             var auxR = retn;
                             if (fun.type == auxR.type) {
+                                s.addSymbols(newEnv.getEnv());
                                 return auxR;
                             }
                             else {
@@ -87,6 +90,7 @@ var Call = /** @class */ (function (_super) {
                             }
                         }
                     }
+                    s.addSymbols(newEnv.getEnv());
                 }
             }
         }

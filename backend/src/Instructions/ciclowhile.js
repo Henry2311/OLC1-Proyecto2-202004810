@@ -50,6 +50,8 @@ var cicloWhile = /** @class */ (function (_super) {
                     }
                 }
             logica = this.logic.run(env);
+            var s = Singleton_1.Singleton.getInstance();
+            s.addSymbols(newEnv.getEnv());
             if (this.transfer != null || aux != null) {
                 if (this.transfer == type_1.Type.BREAK || aux == type_1.Type.BREAK) {
                     break;

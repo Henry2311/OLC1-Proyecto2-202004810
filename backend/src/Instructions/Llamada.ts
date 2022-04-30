@@ -44,6 +44,7 @@ export class Call extends Funcion{
                         if(retn != undefined){
                             let auxR:Return = retn
                             if(fun.type == auxR.type){
+                                s.addSymbols(newEnv.getEnv())
                                 return auxR
                             }else{
                                 s.addError(new Errores("Semantico","Tipo de dato incompatible para return de "+fun.id,this.line,this.column))
@@ -51,6 +52,7 @@ export class Call extends Funcion{
                             
                         }
                     }
+                    s.addSymbols(newEnv.getEnv())
                 }
             }else{
                 if(fun.instruction!=null){
@@ -59,12 +61,14 @@ export class Call extends Funcion{
                         if(retn != undefined){
                             let auxR:Return = retn
                             if(fun.type == auxR.type){
+                                s.addSymbols(newEnv.getEnv())
                                 return auxR
                             }else{
                                 s.addError(new Errores("Semantico","Tipo de dato incompatible para return de "+fun.id,this.line,this.column))
                             }
                         }
                     }
+                    s.addSymbols(newEnv.getEnv())
                 }
             }
         }

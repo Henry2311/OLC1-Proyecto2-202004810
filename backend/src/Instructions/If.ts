@@ -22,6 +22,7 @@ export class Ifsentencia extends Instruction{
 
     public run(env: ENV) {
         const logica = this.logic?.run(env)
+        var s = Singleton.getInstance()
         let aux
         if(this.returnF!=null){
             this.instruction?.push(new TrRet(this.returnF,this.line,this.column))
@@ -41,9 +42,11 @@ export class Ifsentencia extends Instruction{
                         continue
                     }else if(t!=undefined){
                         let auxR:Return = t
+                        s.addSymbols(newEnv.getEnv())
                         return auxR
                     }
                 }   
+                s.addSymbols(newEnv.getEnv())
                 if(this.transfer != null || aux!=null){
                     if(this.transfer == Type.BREAK || aux == Type.BREAK){
                         return Type.BREAK
@@ -67,9 +70,11 @@ export class Ifsentencia extends Instruction{
                         continue
                     }else if(t!=undefined){
                         let auxR:Return = t
+                        s.addSymbols(newEnv.getEnv())
                         return auxR
                     }
                 }
+                s.addSymbols(newEnv.getEnv())
                 if(this.transfer != null || aux!=null){
                     if(this.transfer == Type.BREAK || aux == Type.BREAK){
                         return Type.BREAK
@@ -102,9 +107,11 @@ export class Ifsentencia extends Instruction{
                     continue
                 }else if(t!=undefined){
                     let auxR:Return = t
+                    s.addSymbols(newEnv.getEnv())
                     return auxR
                 }
             }
+            s.addSymbols(newEnv.getEnv())
             if(this.transfer != null || aux!=null){
                 if(this.transfer == Type.BREAK || aux == Type.BREAK){
                     return Type.BREAK
